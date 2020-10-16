@@ -3,3 +3,6 @@ bin/*
 .settings/*
 .project
 /*.txt
+.idea/
+AIAD_MIEIC_2020_21.iml
+out/
