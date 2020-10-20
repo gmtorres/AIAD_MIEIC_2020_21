@@ -13,8 +13,8 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	}
 	
 
-	protected Vector<ACLMessage > prepareCfps(ACLMessage cfp) {
-		Vector<ACLMessage > v = new Vector<ACLMessage >();
+	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
+		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero comprar!");
 		DFAgentDescription[] sellers = this.buyer.searchForSeller();
 		System.out.println("Vou enviar a proposta a " + sellers.length + " vendedores.");
@@ -29,8 +29,27 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	}
 	
 	protected void handleAllResponses(Vector responses, Vector acceptances) {
+		Vector<ACLMessage> replys = new Vector<ACLMessage>();
+		Integer lowerPrice = null;
+		int position = -1;
 		for (int i = 0; i < responses.size(); i++) {
 			System.out.println(responses.get(i));
+			ACLMessage response = (ACLMessage) responses.get(i);
+			if(response.getPerformative() != ACLMessage.PROPOSE)
+				continue;
+			Integer proposed_price = Integer.parseInt(response.getContent());
+			System.out.println("Preço a pagar " + response.getContent());
+			if(proposed_price < this.buyer.getMoney() && (lowerPrice == null || proposed_price < lowerPrice)) {
+				lowerPrice = proposed_price;
+				position = i;
+			}
+		}
+		if(position != -1) {
+			ACLMessage accept = ((ACLMessage)responses.get(position)).createReply();
+			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+			acceptances.add(accept);
+			System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
 		}
 	}
+	
 }	

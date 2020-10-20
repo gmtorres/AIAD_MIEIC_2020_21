@@ -31,4 +31,12 @@ public class SellerRespondBuyer extends ContractNetResponder{
 		
 		System.out.println("Seller received out of sequence");
 	}
+	
+	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept){
+		System.out.println("Tenho um contrato!");
+		System.out.println(cfp);
+		System.out.println(propose);
+		System.out.println(accept);
+		return null;
+	}
 }
