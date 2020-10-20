@@ -9,16 +9,14 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetResponder;
 
-public class Seller extends Agent{
-	
-	Property property;
+public class Seller extends Person{
 	
 	public Seller(){
-		property = new Property();
+		this.setProperty(new Property());
 	}
 	
 	public void setup() {
-		System.out.println("Let's sell this property for: " + this.property.getPrice() + "€");
+		System.out.println("Let's sell this property for: " + this.getProperty().getPrice() + "€");
 		SequentialBehaviour cycle1 = new SequentialBehaviour();
 		cycle1.addSubBehaviour(new SellerRespondBuyer(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		addBehaviour(cycle1);
@@ -46,5 +44,6 @@ public class Seller extends Agent{
 			fe.printStackTrace();
 		}
 	}
+	
 	
 }

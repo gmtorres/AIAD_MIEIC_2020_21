@@ -1,6 +1,6 @@
 import java.util.Random;
 
-public class Property {
+public class Property implements java.io.Serializable{
 	private int price;
 	Property(){
 		Random rnd = new Random();
@@ -11,5 +11,9 @@ public class Property {
 	}
 	public void setPrice(int price) {
 		this.price = price;
+	}
+	
+	public String toString() {
+		return "This property is evaluated in " + this.getPrice() + "€"; 
 	}
 }

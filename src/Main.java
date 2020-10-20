@@ -8,7 +8,7 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 1;
+	private static int n_sellers = 4;
 	private static int n_buyers = 1;
 	
 	public static void main(String[] str) throws StaleProxyException {

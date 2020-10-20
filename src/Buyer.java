@@ -7,13 +7,11 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
-public class Buyer extends Agent{
-	
-	private int money;
+public class Buyer extends Person{
 	
 	public Buyer(){
 		Random rnd = new Random();
-		setMoney(rnd.nextInt(800000) + 800000);
+		setMoney(rnd.nextInt(80000) + 80000);
 	}
 	
 	public void setup() {
@@ -41,13 +39,5 @@ public class Buyer extends Agent{
 			fe.printStackTrace();
 		}
 		return result;
-	}
-
-	public int getMoney() {
-		return money;
-	}
-
-	public void setMoney(int money) {
-		this.money = money;
 	}
 }

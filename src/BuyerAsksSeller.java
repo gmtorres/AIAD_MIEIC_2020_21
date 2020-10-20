@@ -3,6 +3,7 @@ import java.util.Vector;
 import jade.core.AID;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
 public class BuyerAsksSeller extends ContractNetInitiator  {
@@ -50,6 +51,15 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			acceptances.add(accept);
 			System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
 		}
+	}
+	
+	protected void handleInform(ACLMessage inform) {
+		System.out.println("Inform recebido");
+		System.out.println(inform);
+
+		Integer price_payed = Integer.parseInt(inform.getContent());
+		this.buyer.increaseMoney(-price_payed);
+		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€");
 	}
 	
 }	
