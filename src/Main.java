@@ -8,6 +8,9 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
+	private static int n_sellers = 1;
+	private static int n_buyers = 1;
+	
 	public static void main(String[] str) throws StaleProxyException {
 		Runtime rt = Runtime.instance();
 		Profile profile = new ProfileImpl();
@@ -15,28 +18,44 @@ public class Main {
 		//profile.setParameter();
 		ContainerController cc = rt.createMainContainer(profile);
 		AgentController agc;
-		createSeller(cc);
-		createBuyer(cc);
-	}
-	
-	private static void createSeller(ContainerController cc) {
-		AgentController agc;
 		try {
-			agc = cc.createNewAgent("Vendedor","Seller",null);
+			agc = cc.createNewAgent("Sniffer","jade.tools.sniffer.Sniffer",null);
 			agc.start();
 		} catch (StaleProxyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	private static void createBuyer(ContainerController cc) {
-		AgentController agc;
+		createSellers(cc);
 		try {
-			agc = cc.createNewAgent("Comprador","Buyer",null);
-			agc.start();
-		} catch (StaleProxyException e) {
-			// TODO Auto-generated catch block
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
 			e.printStackTrace();
+		}
+		createBuyers(cc);
+	}
+	
+	private static void createSellers(ContainerController cc) {
+		for(int i = 0; i < n_sellers; i++) {
+			AgentController agc;
+			try {
+				agc = cc.createNewAgent("Vendedor_" + String.valueOf(i),"Seller",null);
+				agc.start();
+			} catch (StaleProxyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	private static void createBuyers(ContainerController cc) {
+		for(int i = 0; i < n_buyers; i++) {
+			AgentController agc;
+			try {
+				agc = cc.createNewAgent("Comprador_" + String.valueOf(i),"Buyer",null);
+				agc.start();
+			} catch (StaleProxyException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -1,5 +1,6 @@
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -9,10 +10,19 @@ import jade.lang.acl.MessageTemplate;
 import jade.proto.ContractNetResponder;
 
 public class Seller extends Agent{
+	
+	Property property;
+	
+	public Seller(){
+		property = new Property();
+	}
+	
 	public void setup() {
-		System.out.println("Let's sell");
+		System.out.println("Let's sell this property for: " + this.property.getPrice() + "€");
+		SequentialBehaviour cycle1 = new SequentialBehaviour();
+		cycle1.addSubBehaviour(new SellerRespondBuyer(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
+		addBehaviour(cycle1);
 		register();
-		//addBehaviour(new SellerBehavior(this, MessageTemplate.MatchPerformative(ACLMessage.QUERY_IF)));
 	}
 	
 	protected void register() {
@@ -35,19 +45,6 @@ public class Seller extends Agent{
 		}catch(FIPAException fe) {
 			fe.printStackTrace();
 		}
-	}
-	
-	class SellerBehavior extends ContractNetResponder {
-
-		public SellerBehavior(Agent a, MessageTemplate mt) {
-			super(a, mt);
-			
-		}
-		
-		protected ACLMessage handleCfp() {
-			return new ACLMessage(0);
-		}
-		
 	}
 	
 }
