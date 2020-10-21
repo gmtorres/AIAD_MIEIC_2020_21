@@ -17,9 +17,9 @@ public class Seller extends Person{
 	
 	public void setup() {
 		System.out.println("Let's sell this property for: " + this.getProperty().getPrice() + "€");
-		SequentialBehaviour cycle1 = new SequentialBehaviour();
-		cycle1.addSubBehaviour(new SellerRespondBuyer(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
-		addBehaviour(cycle1);
+		SequentialBehaviour seq = new SequentialBehaviour();
+		seq.addSubBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
+		addBehaviour(seq);
 		register();
 	}
 	

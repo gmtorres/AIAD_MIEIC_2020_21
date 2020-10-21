@@ -11,7 +11,7 @@ public class Buyer extends Person{
 	
 	public Buyer(){
 		Random rnd = new Random();
-		setMoney(rnd.nextInt(80000) + 80000);
+		setMoney(rnd.nextInt(90000) + 80000);
 	}
 	
 	public void setup() {
