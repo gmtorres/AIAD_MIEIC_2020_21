@@ -34,7 +34,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		Integer lowerPrice = null;
 		int position = -1;
 		for (int i = 0; i < responses.size(); i++) {
-			System.out.println(responses.get(i));
+			//System.out.println(responses.get(i));
 			ACLMessage response = (ACLMessage) responses.get(i);
 			if(response.getPerformative() != ACLMessage.PROPOSE)
 				continue;
@@ -53,9 +53,13 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		}
 	}
 	
+	protected void handleFailure(ACLMessage inform) {
+		this.reset(new ACLMessage(ACLMessage.CFP));
+	}
+	
 	protected void handleInform(ACLMessage inform) {
 		System.out.println("Inform recebido");
-		System.out.println(inform);
+		//System.out.println(inform);
 
 		Integer price_payed = Integer.parseInt(inform.getContent());
 		this.buyer.increaseMoney(-price_payed);

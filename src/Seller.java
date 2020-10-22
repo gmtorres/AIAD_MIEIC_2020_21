@@ -11,6 +11,9 @@ import jade.proto.ContractNetResponder;
 
 public class Seller extends Person{
 	
+	private String bestBuyer = null;
+	private Integer bestOffer = null;
+	
 	public Seller(){
 		this.setProperty(new Property());
 	}
@@ -43,6 +46,22 @@ public class Seller extends Person{
 		}catch(FIPAException fe) {
 			fe.printStackTrace();
 		}
+	}
+
+	public String getBestBuyer() {
+		return bestBuyer;
+	}
+
+	public void setBestBuyer(String bestBuyer) {
+		this.bestBuyer = bestBuyer;
+	}
+
+	public Integer getBestOffer() {
+		return bestOffer;
+	}
+
+	public void setBestOffer(Integer bestOffer) {
+		this.bestOffer = bestOffer;
 	}
 	
 	

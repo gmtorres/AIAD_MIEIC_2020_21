@@ -13,7 +13,7 @@ public class SellerRespondBuyer extends ContractNetResponder{
 	}
 	protected ACLMessage handleCfp(ACLMessage cfp) {
 		System.out.println("Recebi pedido de compra!");
-		System.out.println(cfp);
+		//System.out.println(cfp);
 		ACLMessage reply = cfp.createReply();
 		
 		if(seller.getProperty() == null) {
@@ -35,9 +35,9 @@ public class SellerRespondBuyer extends ContractNetResponder{
 	
 	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept) throws FailureException{
 		System.out.println("Tenho um contrato!");
-		System.out.println(cfp);
-		System.out.println(propose);
-		System.out.println(accept);
+		//System.out.println(cfp);
+		//System.out.println(propose);
+		//System.out.println(accept);
 		
 		Integer price_payed = Integer.parseInt(propose.getContent());
 		
