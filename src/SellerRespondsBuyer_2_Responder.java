@@ -14,7 +14,7 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 	
 	protected ACLMessage handleCfp(ACLMessage cfp) {
 		System.out.println("Recebi pedido de compra!");
-		System.out.println(cfp);
+		//System.out.println(cfp);
 		ACLMessage reply = cfp.createReply();
 		
 		if(seller.getProperty() == null) {
@@ -23,8 +23,11 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 		}
 		
 		reply.setPerformative(ACLMessage.PROPOSE);
+		Integer offer = this.seller.getProperty().getPrice();
+		reply.setContent(Integer.toString(offer));
 		
-		reply.setContent(Integer.toString(this.seller.getProperty().getPrice()));
+		//this.seller.setBestBuyer(cfp.getSender().getLocalName());
+		//this.seller.setBestOffer(offer);
 		
 		return reply;
 	}
@@ -35,25 +38,31 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 	}
 	
 	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept) throws FailureException{
-		System.out.println("Tenho um contrato!");
-		System.out.println(cfp);
-		System.out.println(propose);
-		System.out.println(accept);
-		
-		Integer price_payed = Integer.parseInt(propose.getContent());
-		
 		ACLMessage reply = accept.createReply();
-		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent(propose.getContent());
-		/*try {
-			//reply.setContentObject(this.seller.getProperty());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
-		System.out.println("A enviar inform");
-		this.seller.setProperty(null);
-		this.seller.increaseMoney(price_payed);
-		System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "€");
+		if(this.seller.getProperty() != null) {
+			this.seller.setProperty(null);
+			System.out.println("Tenho um contrato!");
+			//System.out.println(cfp);
+			//System.out.println(propose);
+			//System.out.println(accept);
+			
+			Integer price_payed = Integer.parseInt(propose.getContent());
+			
+			reply.setPerformative(ACLMessage.INFORM);
+			reply.setContent(propose.getContent());
+			/*try {
+				//reply.setContentObject(this.seller.getProperty());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}*/
+			System.out.println("A enviar inform");
+			this.seller.setProperty(null);
+			this.seller.increaseMoney(price_payed);
+			System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "€");
+		}else {
+			System.out.println("A enviar failure");
+			reply.setPerformative(ACLMessage.FAILURE);
+		}
 		return reply;
 	}
 	
