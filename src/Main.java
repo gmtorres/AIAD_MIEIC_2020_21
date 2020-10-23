@@ -8,8 +8,8 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 1;
-	private static int n_buyers = 5;
+	private static int n_sellers = 5;
+	private static int n_buyers = 1;
 	
 	public static void main(String[] str) throws StaleProxyException {
 		Runtime rt = Runtime.instance();

@@ -11,8 +11,8 @@ public class Buyer extends Person{
 	
 	public Buyer(){
 		Random rnd = new Random();
-		setMoney(rnd.nextInt(90000) + 80000);
-		System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
+		setMoney(rnd.nextInt(500000) + 70000);
+		System.out.println(this.getName() + ": I have " + this.getMoney() + "€");
 	}
 	
 	public void setup() {
@@ -27,15 +27,6 @@ public class Buyer extends Person{
 		DFAgentDescription[] result = null;
 		try {
 			result = DFService.search(this, template);
-			if(result.length == 0) {
-				System.out.println("No results found");
-			}else {
-				System.out.println("Look who I found:");
-				for(int i = 0; i < result.length; i++) {
-					System.out.println("Found " + result[i].getName());
-				}
-			}
-			System.out.println("\n");
 		}catch(FIPAException fe) {
 			fe.printStackTrace();
 		}

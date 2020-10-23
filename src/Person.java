@@ -28,5 +28,13 @@ public class Person extends Agent {
 	public void setProperty(Property prop) {
 		this.property = prop;
 	}
+	
+	public float getRelativeDifference(int price) {
+		return (price - this.getProperty().getPrice()) / this.getProperty().getPrice();
+	}
+	
+	public int getPriceFromRelativeDifference(double relative) {
+		return (int) (this.getProperty().getPrice() * relative); 
+	}
 
 }

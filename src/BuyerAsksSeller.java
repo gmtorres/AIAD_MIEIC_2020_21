@@ -18,14 +18,14 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero comprar!");
 		DFAgentDescription[] sellers = this.buyer.searchForSeller();
-		System.out.println("Vou enviar a proposta a " + sellers.length + " vendedores.");
+		//System.out.println("Vou enviar a proposta a " + sellers.length + " vendedores.");
 		for (int i = 0; i < sellers.length; i++) {
 			String name = sellers[i].getName().getName();
-			System.out.println(name);
+			//System.out.println(name);
 			cfp.addReceiver(sellers[i].getName());
 		}
 		v.add(cfp);
-		System.out.println("Enviado, siga comprar!");
+		//System.out.println("Enviado, siga comprar!");
 		return v;		
 	}
 	
@@ -33,13 +33,13 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		Vector<ACLMessage> replys = new Vector<ACLMessage>();
 		Integer lowerPrice = null;
 		int position = -1;
-		for (int i = 0; i < responses.size(); i++) {
+		for (int i = 0; i < responses.size(); i++) { // analyze all proposes
 			//System.out.println(responses.get(i));
 			ACLMessage response = (ACLMessage) responses.get(i);
 			if(response.getPerformative() != ACLMessage.PROPOSE)
 				continue;
 			Integer proposed_price = Integer.parseInt(response.getContent());
-			System.out.println("Preço a pagar " + response.getContent());
+			//System.out.println("Preço a pagar " + response.getContent());
 			if(proposed_price < this.buyer.getMoney() && (lowerPrice == null || proposed_price < lowerPrice)) {
 				lowerPrice = proposed_price;
 				position = i;
@@ -50,6 +50,8 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 			acceptances.add(accept);
 			System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
+		}else {
+			System.out.println("Não aceitei nenhum preço");
 		}
 	}
 	
@@ -63,7 +65,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 
 		Integer price_payed = Integer.parseInt(inform.getContent());
 		this.buyer.increaseMoney(-price_payed);
-		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€");
+		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€");
 	}
 	
 }	

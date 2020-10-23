@@ -14,6 +14,8 @@ public class Seller extends Person{
 	private String bestBuyer = null;
 	private Integer bestOffer = null;
 	
+	private String hurry = "desperate";
+	
 	public Seller(){
 		this.setProperty(new Property());
 	}
