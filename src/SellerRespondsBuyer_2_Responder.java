@@ -62,14 +62,9 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 				reply.setContent(Integer.toString(propose) + "/" + this.seller.getProperty());
 			}else {
 				System.out.println("Vou sugerir outro preço ao comprador");
-				System.out.println(max_value);
-				System.out.println(offer);
 				Integer difference = this.max_value - offer;
-				System.out.println(difference);
 				double gaussian = this.generateRandomDistribution(5) * 0.5 + 0.4;
-				System.out.println(gaussian);
 				Integer new_proposal = (int) (offer + difference * gaussian);
-				System.out.println(new_proposal);
 				max_value = new_proposal;
 				reply.setPerformative(ACLMessage.PROPOSE);
 				reply.setContent(Integer.toString(new_proposal) + "/" + this.seller.getProperty());

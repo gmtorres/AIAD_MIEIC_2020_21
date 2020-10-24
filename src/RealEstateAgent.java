@@ -1,11 +1,13 @@
 import jade.core.Agent;
+import java.util.Random;
 
 public class RealEstateAgent extends Agent{
     private RealEstateAgency agency = null;
-    private float agentRate;
+    private int agentRate;
 
-    RealEstateAgent(float agentRate){
-        this.agentRate = agentRate;
+    RealEstateAgent(){
+    	Random rnd = new Random();
+        this.agentRate = rnd.nextInt(10);
     }
 
     public void setAgency(RealEstateAgency agency) {
@@ -16,4 +18,8 @@ public class RealEstateAgent extends Agent{
         this.agency = null;
     }
     
+    public int getAgentRate() {
+    	return this.agentRate;
+    }
+
 }

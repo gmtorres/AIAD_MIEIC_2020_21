@@ -52,7 +52,7 @@ public class SellerRespondBuyer extends ContractNetResponder{
 		System.out.println("A enviar inform");
 		this.seller.setProperty(null);
 		this.seller.increaseMoney(price_payed);
-		System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "€");
+		System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "ï¿½");
 		return reply;
 	}
 }

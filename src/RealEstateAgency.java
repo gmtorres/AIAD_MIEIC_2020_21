@@ -1,18 +1,18 @@
 import java.util.ArrayList;
-import java.util.List;
-
+import java.util.Random;
 import jade.core.Agent;
 
 public class RealEstateAgency extends Agent{
-    private List<RealEstateAgent> agents;
-    private float minAgentRate;
-    private float maxAgentRate;
+    private ArrayList<RealEstateAgent> agents;
+    private int minAgentRate;
+    private int maxAgentRate;
     private int teamSize;
 
-    RealEstateAgency(int size, float minAgentRate, float maxAgentRate, int teamSize) {
+    RealEstateAgency(int size, float minAgentRate, int teamSize) {
+		Random rnd = new Random();
         agents = new ArrayList<RealEstateAgent>();
-        this.minAgentRate = minAgentRate;
-        this.maxAgentRate = maxAgentRate;
+        this.minAgentRate = rnd.nextInt(5);
+        this.maxAgentRate = rnd.nextInt(4) + 6;
     }
 
     public int getTeamSize() {
@@ -33,11 +33,11 @@ public class RealEstateAgency extends Agent{
         agents.remove(agent);
     }
 
-    public float getAgentMinRate() {
+    public int getAgentMinRate() {
         return this.minAgentRate;
     }
 
-    public float getMaxAgentRate() {
+    public int getMaxAgentRate() {
         return this.maxAgentRate;
     }
 
