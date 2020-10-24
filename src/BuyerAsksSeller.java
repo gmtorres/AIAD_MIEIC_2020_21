@@ -39,13 +39,12 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	
 	protected void handleAllResponses(Vector responses, Vector acceptances) {
 		Vector replies = new Vector<>();
-		Integer lowerPrice = null;
+		
 		double bestFactor = 0;
 		int position = -1;
 		int valid_proposals = 0;
 		
 		for (int i = 0; i < responses.size(); i++) { // analyze all proposes
-			//System.out.println(responses.get(i));
 			
 			ACLMessage response = (ACLMessage) responses.get(i);
 			if(response.getPerformative() != ACLMessage.PROPOSE)
@@ -56,12 +55,6 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			Property proposed_property = new Property(parts[1]);
 			Integer standard_price = proposed_property.evaluateHouse();
 			System.out.println("Seller sugeriu " + proposed_price);
-			/*
-			System.out.println("Preço a pagar " + response.getContent());
-			if(proposed_price < this.buyer.getMoney() && (lowerPrice == null || proposed_price < lowerPrice)) {
-				lowerPrice = proposed_price;
-				position = i;
-			}*/
 			
 			// diferença relativa entre o preço proposto e o que o buyer tem, se for muito maior, não vale a pena negociar
 			double relativeDifference = (double)(proposed_price - this.buyer.getMoney() ) / (double)this.buyer.getMoney();
@@ -121,7 +114,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					valid_proposals++;
 					Integer new_proposal;
 					if(relativePropertyPrice > 1) { // preço proposto é maior que o preço da propriedade
-						new_proposal = (int)(standard_price - 1.5 * (proposed_price - standard_price));
+						new_proposal = (int)(standard_price - (1 + 0.5) * (proposed_price - standard_price));
 					}else { // preço proposto é menor que o preço da propriedade, tentar descer a proposta, mas não muito, para não abusar
 						new_proposal = (int) (proposed_price - 0.5*(proposed_price - 0.90 * standard_price));
 					}
@@ -134,14 +127,8 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 						bestFactor = factor;
 						position = i;
 					}
-					
-				}
-				
-				
-				
+				}	
 			}
-			
-			
 		}
 		
 		if(position != -1) { // se tiver dinheiro para aceitar alguma proposta e selecionou alguma

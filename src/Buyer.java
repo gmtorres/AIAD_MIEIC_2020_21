@@ -9,11 +9,21 @@ import jade.lang.acl.ACLMessage;
 
 public class Buyer extends Person{
 	
+	enum Looking {
+		HURRY,
+		CALM,
+		BEST
+	}
+	
+	private Looking looking_state;
+	
 	public Buyer(){
 		Random rnd = new Random();
 		setMoney(rnd.nextInt(500000) + 70000);
 		setMoney(100000);
 		System.out.println(this.getName() + ": I have " + this.getMoney() + "€");
+		
+		looking_state = Looking.CALM;
 	}
 	
 	public void setup() {
@@ -32,5 +42,41 @@ public class Buyer extends Person{
 			fe.printStackTrace();
 		}
 		return result;
+	}
+	
+	public double getBestFactor() {
+		switch(looking_state) {
+		case HURRY:
+			return 1;
+		case CALM:
+			return 1.1;
+		case BEST:
+			return 1.2;
+		}
+		return 1.2;
+	}
+	
+	public int getMinValid() {
+		switch(looking_state) {
+		case HURRY:
+			return 5;
+		case CALM:
+			return 4;
+		case BEST:
+			return 2;
+		}
+		return 1;
+	}
+	
+	public double getWorstFactor() {
+		switch(looking_state) {
+		case HURRY:
+			return 0.85;
+		case CALM:
+			return 1;
+		case BEST:
+			return 1.15;
+		}
+		return 1;
 	}
 }

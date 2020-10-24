@@ -11,13 +11,34 @@ import jade.proto.ContractNetResponder;
 
 public class Seller extends Person{
 	
+	enum Personality {
+		PATIENT,
+		NORMAL,
+		IMPATIENT
+	}
+	
+	enum MoneyStatus {
+		DESPERATE,
+		NORMAL
+	}
+	
+	enum PriceChange{
+		FLEXIBLE,
+		NORMAL
+	}
+	
 	private String bestBuyer = null;
 	private Integer bestOffer = null;
 	
-	private String hurry = "desperate";
+	private Personality personality;
+	private MoneyStatus money_status;
+	private PriceChange price_change;
 	
 	public Seller(){
 		this.setProperty(new Property());
+		personality = Personality.NORMAL;
+		money_status = MoneyStatus.NORMAL;
+		price_change = PriceChange.NORMAL;
 	}
 	
 	public void setup() {
@@ -64,6 +85,57 @@ public class Seller extends Person{
 
 	public void setBestOffer(Integer bestOffer) {
 		this.bestOffer = bestOffer;
+	}
+	
+	public int getMaxInteractions() {
+		switch(personality) {
+		case PATIENT:
+			return 10;
+		case NORMAL:
+			return 7;
+		case IMPATIENT:
+			return 4;
+		}
+		return 7;
+	}
+	
+	public double getMinDifference(){
+		switch(money_status) {
+		case DESPERATE:
+			return 0.85;
+		case NORMAL:
+			return 0.9;
+		}
+		return 0.9;
+	}
+	
+	public double getMaxDifference(){
+		switch(money_status) {
+		case DESPERATE:
+			return 1.05;
+		case NORMAL:
+			return 1.1;
+		}
+		return 1.1;
+	}
+	
+	public double getPriceStart(){
+		switch(price_change) {
+		case FLEXIBLE:
+			return 0.3;
+		case NORMAL:
+			return 0.4;
+		}
+		return 0.4;
+	}
+	public double getPriceRange(){
+		switch(price_change) {
+		case FLEXIBLE:
+			return 0.3;
+		case NORMAL:
+			return 0.4;
+		}
+		return 0.4;
 	}
 	
 	

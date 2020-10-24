@@ -22,8 +22,8 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 		super(seller, cfp);
 		this.seller = seller;
 		this.interactions = 0;
-		this.min_value = this.seller.getPriceFromRelativeDifference(0.9); // Minimum value
-		this.max_value = this.seller.getPriceFromRelativeDifference(1.1); // Max value
+		this.min_value = this.seller.getPriceFromRelativeDifference(this.seller.getMinDifference()); // Minimum value
+		this.max_value = this.seller.getPriceFromRelativeDifference(this.seller.getMaxDifference()); // Max value
 		System.out.println("So aceito até " + this.min_value);
 	}
 	
@@ -50,7 +50,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			reply.setContent(Integer.toString(proposal) + "/" + this.seller.getProperty());
 		}else { // analisar o valor proposto pelo comprador e sugerir outro ou aceitar
 			System.out.println("Comprador sugeriu outro preço: " + offer);
-			if(interactions >= 5) {
+			if(interactions >= this.seller.getMaxInteractions()) {
 				System.out.println("Cansei me desta negociação, vou desistir");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}else if(offer < this.min_value) {
@@ -64,7 +64,8 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			}else {
 				System.out.println("Vou sugerir outro preço ao comprador");
 				Integer difference = this.max_value - offer;
-				double gaussian = this.generateRandomDistribution(5) * 0.4 + 0.3;
+				double gaussian = this.generateRandomDistribution(5) * this.seller.getPriceRange() 
+									+ this.seller.getPriceStart();
 				Integer new_proposal = (int) (offer + difference * gaussian);
 				max_value = new_proposal;
 				reply.setPerformative(ACLMessage.PROPOSE);
