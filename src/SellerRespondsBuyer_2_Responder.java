@@ -24,6 +24,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 		this.interactions = 0;
 		this.min_value = this.seller.getPriceFromRelativeDifference(0.9); // Minimum value
 		this.max_value = this.seller.getPriceFromRelativeDifference(1.1); // Max value
+		System.out.println("So aceito até " + this.min_value);
 	}
 	
 	protected ACLMessage handleCfp(ACLMessage cfp) {
@@ -63,7 +64,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			}else {
 				System.out.println("Vou sugerir outro preço ao comprador");
 				Integer difference = this.max_value - offer;
-				double gaussian = this.generateRandomDistribution(5) * 0.5 + 0.4;
+				double gaussian = this.generateRandomDistribution(5) * 0.4 + 0.3;
 				Integer new_proposal = (int) (offer + difference * gaussian);
 				max_value = new_proposal;
 				reply.setPerformative(ACLMessage.PROPOSE);

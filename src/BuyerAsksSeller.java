@@ -1,3 +1,4 @@
+import java.util.Random;
 import java.util.Vector;
 
 import jade.core.AID;
@@ -7,7 +8,14 @@ import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
 
 public class BuyerAsksSeller extends ContractNetInitiator  {
+	
+	static Random rnd;
+	static {
+		rnd = new Random();
+	}
+	
 	private Buyer buyer;
+	
 	public BuyerAsksSeller(Buyer buyer, ACLMessage cfp) {
 		super(buyer, cfp);
 		this.buyer = buyer;
@@ -74,7 +82,37 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					System.out.println("Preço acima do que posso pagar, vou tentar descer");
 					ACLMessage reply = response.createReply();
 					reply.setPerformative(ACLMessage.CFP);
-					Integer new_proposal = (int) (this.buyer.getMoney() - 1.5 * (proposed_price - this.buyer.getMoney())); // possivelmente ser entre 1 e 1.5
+					Integer diff;
+					
+					//quanto maior a diferença de preço, menos posso pedir em comparação com o meu
+					/*System.out.println("");
+					
+					System.out.println(proposed_price);
+					System.out.println(this.buyer.getMoney());
+					System.out.println(standard_price);
+					System.out.println( (int) ((this.generateRandomDistribution(5)*  0.5 + 1) * (proposed_price - this.buyer.getMoney())));
+					
+					System.out.println("");
+					
+					System.out.println(proposed_price - this.buyer.getMoney());
+					System.out.println(relativeDifference);
+					System.out.println((0.2-relativeDifference)/0.2);
+					System.out.println(((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
+					System.out.println((this.generateRandomDistribution(5)*  0.5 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
+					
+					System.out.println("");
+					
+					System.out.println(relativePropertyPrice);
+					System.out.println(relativePropertyPrice + 1);
+					System.out.println(proposed_price - standard_price);
+					System.out.println((relativePropertyPrice + 1)*(this.generateRandomDistribution(5)*  0.5 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
+					System.out.println("");
+					
+					System.out.println("");*/
+					diff = (int) ((this.generateRandomDistribution(5)*  0.5 + 1) 
+								* ((0.2-relativeDifference)/0.2) 
+								* (proposed_price - this.buyer.getMoney()));
+					Integer new_proposal = (int) (this.buyer.getMoney() - diff); // possivelmente ser entre 1 e 1.5
 					reply.setContent(Integer.toString(new_proposal));
 					replies.add(reply);
 					
@@ -166,6 +204,14 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		Integer price_payed = Integer.parseInt(inform.getContent());
 		this.buyer.increaseMoney(-price_payed);
 		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€");
+	}
+	
+	private double generateRandomDistribution(int times) {
+		double result = 0;
+		for(int i = 0; i < times; i++) {
+			result += rnd.nextDouble();
+		}
+		return result / times;
 	}
 	
 }	
