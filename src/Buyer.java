@@ -12,6 +12,7 @@ public class Buyer extends Person{
 	public Buyer(){
 		Random rnd = new Random();
 		setMoney(rnd.nextInt(500000) + 70000);
+		setMoney(100000);
 		System.out.println(this.getName() + ": I have " + this.getMoney() + "€");
 	}
 	

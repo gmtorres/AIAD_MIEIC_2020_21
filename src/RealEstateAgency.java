@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 import jade.core.Agent;
 
 public class RealEstateAgency extends Agent{
@@ -7,7 +10,7 @@ public class RealEstateAgency extends Agent{
     private int teamSize;
 
     RealEstateAgency(int size, float minAgentRate, float maxAgentRate, int teamSize) {
-        agents = new ArrayList<RealEstateAgent> agents;
+        agents = new ArrayList<RealEstateAgent>();
         this.minAgentRate = minAgentRate;
         this.maxAgentRate = maxAgentRate;
     }
@@ -35,7 +38,7 @@ public class RealEstateAgency extends Agent{
     }
 
     public float getMaxAgentRate() {
-        retutn this.maxAgentRate;
+        return this.maxAgentRate;
     }
 
 }

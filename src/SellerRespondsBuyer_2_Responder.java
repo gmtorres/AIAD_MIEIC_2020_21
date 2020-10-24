@@ -4,8 +4,9 @@ import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SSContractNetResponder;
+import jade.proto.SSIteratedContractNetResponder;
 
-public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
+public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetResponder{
 	
 	Seller seller;
 	Integer interactions;
@@ -26,7 +27,7 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 	}
 	
 	protected ACLMessage handleCfp(ACLMessage cfp) {
-		//System.out.println("Recebi pedido de compra!");
+		System.out.println("Recebi pedido de compra!");
 		//System.out.println(cfp);
 		ACLMessage reply = cfp.createReply();
 		
@@ -41,34 +42,52 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 			offer = null;
 		}
 		//se não houve nenhuma oferta, primeira iteração
+		interactions++;
 		if(offer == null) {
 			reply.setPerformative(ACLMessage.PROPOSE);
 			Integer proposal = this.max_value;
-			reply.setContent(Integer.toString(proposal));
+			reply.setContent(Integer.toString(proposal) + "/" + this.seller.getProperty());
 		}else { // analisar o valor proposto pelo comprador e sugerir outro ou aceitar
-			
-			if(offer < this.min_value) {
+			System.out.println("Comprador sugeriu outro preço: " + offer);
+			if(interactions >= 5) {
+				System.out.println("Cansei me desta negociação, vou desistir");
+				reply.setPerformative(ACLMessage.REFUSE);
+			}else if(offer < this.min_value) {
+				System.out.println("Oferta muito baixa, deve estar a goxar comigo");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}
 			else if(offer >= this.max_value) {
 				reply.setPerformative(ACLMessage.PROPOSE);
 				Integer propose = offer;
-				reply.setContent(Integer.toString(propose));
+				reply.setContent(Integer.toString(propose) + "/" + this.seller.getProperty());
 			}else {
+				System.out.println("Vou sugerir outro preço ao comprador");
+				System.out.println(max_value);
+				System.out.println(offer);
 				Integer difference = this.max_value - offer;
-				double gaussian = rnd.nextGaussian() * 0.5 + 0.4;
+				System.out.println(difference);
+				double gaussian = this.generateRandomDistribution(5) * 0.5 + 0.4;
+				System.out.println(gaussian);
 				Integer new_proposal = (int) (offer + difference * gaussian);
+				System.out.println(new_proposal);
+				max_value = new_proposal;
 				reply.setPerformative(ACLMessage.PROPOSE);
-				reply.setContent(Integer.toString(new_proposal));
+				reply.setContent(Integer.toString(new_proposal) + "/" + this.seller.getProperty());
 			}
 		}
 		
 		return reply;
 	}
 	
+	protected void handleRejectProposal(ACLMessage cfp,ACLMessage propose,ACLMessage reject) {
+		
+		System.out.println("Seller received reject");
+	}
+	
 	protected void handleOutOfSequence(ACLMessage msg) {
 		
 		System.out.println("Seller received out of sequence");
+		System.out.println(msg);
 	}
 	
 	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept) throws FailureException{
@@ -80,10 +99,11 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 			//System.out.println(propose);
 			//System.out.println(accept);
 			
-			Integer price_payed = Integer.parseInt(propose.getContent());
+			
+			Integer price_payed = Integer.parseInt(propose.getContent().split("/")[0]);
 			
 			reply.setPerformative(ACLMessage.INFORM);
-			reply.setContent(propose.getContent());
+			reply.setContent(String.valueOf(price_payed));
 			/*try {
 				//reply.setContentObject(this.seller.getProperty());
 			} catch (IOException e) {
@@ -98,6 +118,14 @@ public class SellerRespondsBuyer_2_Responder extends SSContractNetResponder{
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 		return reply;
+	}
+	
+	private double generateRandomDistribution(int times) {
+		double result = 0;
+		for(int i = 0; i < times; i++) {
+			result += rnd.nextDouble();
+		}
+		return result / times;
 	}
 	
 }
