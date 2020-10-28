@@ -133,8 +133,8 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		
 		if(position != -1) { // se tiver dinheiro para aceitar alguma proposta e selecionou alguma
 			
-			if(bestFactor > 1.1 || // boa oferta pelo preço da casa
-			   (valid_proposals < 2 && bestFactor > 0.95)) { // se houverem poucas ofertas, mais vale ficar com uma do que a arder
+			if(bestFactor > this.buyer.getBestFactor() || // boa oferta pelo preço da casa
+			   (valid_proposals <  this.buyer.getMinValid() && bestFactor > this.buyer.getWorstFactor())) { // se houverem poucas ofertas, mais vale ficar com uma do que a arder
 				
 				System.out.println("Vou aceitar a proposta do vendedor");
 				acceptances.clear();
