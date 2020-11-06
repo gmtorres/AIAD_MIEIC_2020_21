@@ -17,7 +17,7 @@ public class AgentAsksAgency extends ProposeInitiator {
 		this.agent = agent;
 	}
 	
-	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
+	protected Vector<ACLMessage> prepareInitiations(ACLMessage cfp) {
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero entrar na agencia! A minha taxa é:" + agent.getAgentRate());
 		DFAgentDescription[] agencies = this.agent.searchForAgency();

@@ -15,7 +15,7 @@ public class AgencyRespondsAgent extends ProposeResponder {
 	}
 	
 	
-	protected ACLMessage handleCfp(ACLMessage cfp) {
+	protected ACLMessage prepareResponse(ACLMessage cfp) {
 		System.out.println("Recebi proposta do agente!");
 		
 		int num = Integer.parseInt(cfp.getContent().substring(cfp.getContent().lastIndexOf(":") + 1));
