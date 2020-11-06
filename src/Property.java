@@ -71,8 +71,12 @@ public class Property implements java.io.Serializable{
 			Attribute att = this.attributes.get(i);
 			evaluation += att.getValue() * att.getPrice();
 		}
-		evaluation = 100000;
+		//evaluation = 100000;
 		return evaluation;
+	}
+	
+	static public double relativePropertyDifference(Property p1, Property p2) {
+		return 1;
 	}
 	
 	public int getPrice() {

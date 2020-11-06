@@ -17,10 +17,18 @@ public class Buyer extends Person{
 	
 	private Looking looking_state;
 	
+	private Property desired_property;
+	private Property property;
+	
 	public Buyer(){
 		Random rnd = new Random();
 		setMoney(rnd.nextInt(500000) + 70000);
 		setMoney(100000);
+		
+		this.property = null;
+		this.desired_property = new Property();
+		this.setMoney((int) (this.desired_property.evaluateHouse() * (0.9 + rnd.nextFloat() * 0.5)));
+		
 		System.out.println(this.getName() + ": I have " + this.getMoney() + "€");
 		
 		looking_state = Looking.CALM;

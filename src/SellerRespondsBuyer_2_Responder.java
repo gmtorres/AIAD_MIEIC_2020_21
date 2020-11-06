@@ -53,7 +53,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			if(interactions >= this.seller.getMaxInteractions()) {
 				System.out.println("Cansei me desta negociação, vou desistir");
 				reply.setPerformative(ACLMessage.REFUSE);
-			}else if(offer < this.min_value) {
+			}else if(offer < this.min_value * 0.90) {
 				System.out.println("Oferta muito baixa, deve estar a goxar comigo");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}

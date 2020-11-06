@@ -67,7 +67,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			}else { // negociar ou se diferença < 0 posso aceitar ou negociar
 				System.out.println("Vou negociar");
 				double relativePropertyPrice = (double)standard_price / (double)proposed_price;
-				double relativePropertyValue = 1;
+				double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getProperty(), proposed_property);
 
 				double factor = relativePropertyPrice * relativePropertyValue; // quality for the price
 				
@@ -78,7 +78,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					Integer diff;
 					
 					//quanto maior a diferença de preço, menos posso pedir em comparação com o meu
-					/*System.out.println("");
+					System.out.println("");
 					
 					System.out.println(proposed_price);
 					System.out.println(this.buyer.getMoney());
@@ -96,15 +96,18 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					System.out.println("");
 					
 					System.out.println(relativePropertyPrice);
-					System.out.println(relativePropertyPrice + 1);
+					System.out.println(1/relativePropertyPrice);
+					System.out.println(1/relativePropertyPrice + 1);
 					System.out.println(proposed_price - standard_price);
-					System.out.println((relativePropertyPrice + 1)*(this.generateRandomDistribution(5)*  0.5 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
+					System.out.println((1/relativePropertyPrice + 0.5)*(this.generateRandomDistribution(5)*  0.25 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
 					System.out.println("");
 					
-					System.out.println("");*/
-					diff = (int) ((this.generateRandomDistribution(5)*  0.5 + 1) 
+					System.out.println("");
+					diff = (int) (
+								( 1 / relativePropertyPrice + 0.25)
+								* (this.generateRandomDistribution(5)*  0.125 + 1) 
 								* ((0.2-relativeDifference)/0.2) 
-								* (proposed_price - this.buyer.getMoney()));
+								* (proposed_price - 0.98*this.buyer.getMoney()));
 					Integer new_proposal = (int) (this.buyer.getMoney() - diff); // possivelmente ser entre 1 e 1.5
 					reply.setContent(Integer.toString(new_proposal));
 					replies.add(reply);

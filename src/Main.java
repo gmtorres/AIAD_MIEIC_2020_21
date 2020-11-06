@@ -8,7 +8,7 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 5;
+	private static int n_sellers = 1;
 	private static int n_buyers = 1;
 	private static int n_reagencies = 0;
 	private static int n_reagents = 0;
