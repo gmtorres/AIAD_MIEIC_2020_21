@@ -37,7 +37,7 @@ public class RealEstateAgency extends Agent{
         return this.minAgentRate;
     }
 
-    public int getMaxAgentRate() {
+    public int getAgentMaxRate() {
         return this.maxAgentRate;
     }
 
