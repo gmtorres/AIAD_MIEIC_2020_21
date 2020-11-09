@@ -29,13 +29,16 @@ public class Buyer extends Person{
 		this.desired_property = new Property();
 		this.setMoney((int) (this.desired_property.evaluateHouse() * (0.9 + rnd.nextFloat() * 0.5)));
 		
-		System.out.println(this.getName() + ": I have " + this.getMoney() + "€");
-		
 		looking_state = Looking.CALM;
 	}
 	
 	public void setup() {
+		System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
 		addBehaviour(new BuyerAsksSeller(this, new ACLMessage(ACLMessage.CFP)));
+	}
+	
+	public Property getDesiredProperty() {
+		return this.desired_property;
 	}
 	
 	public DFAgentDescription[] searchForSeller() {

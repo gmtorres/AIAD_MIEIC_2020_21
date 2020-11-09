@@ -90,7 +90,6 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept) throws FailureException{
 		ACLMessage reply = accept.createReply();
 		if(this.seller.getProperty() != null) {
-			this.seller.setProperty(null);
 			System.out.println("Tenho um contrato!");
 			//System.out.println(cfp);
 			//System.out.println(propose);
@@ -107,9 +106,10 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 				e.printStackTrace();
 			}*/
 			System.out.println("A enviar inform");
+			Property temp_prop = this.seller.getProperty();
 			this.seller.setProperty(null);
 			this.seller.increaseMoney(price_payed);
-			System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "€");
+			System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "€, so baixava até: " + this.min_value+"€, a casa valia: " + temp_prop.getPrice()+"€");
 		}else {
 			System.out.println("A enviar failure");
 			reply.setPerformative(ACLMessage.FAILURE);

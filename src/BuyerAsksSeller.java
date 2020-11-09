@@ -15,10 +15,12 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	}
 	
 	private Buyer buyer;
+	private Property selected_property;
 	
 	public BuyerAsksSeller(Buyer buyer, ACLMessage cfp) {
 		super(buyer, cfp);
 		this.buyer = buyer;
+		this.selected_property = null;
 	}
 	
 
@@ -67,7 +69,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			}else { // negociar ou se diferença < 0 posso aceitar ou negociar
 				System.out.println("Vou negociar");
 				double relativePropertyPrice = (double)standard_price / (double)proposed_price;
-				double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getProperty(), proposed_property);
+				double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getDesiredProperty(), proposed_property);
 
 				double factor = relativePropertyPrice * relativePropertyValue; // quality for the price
 				
@@ -143,7 +145,8 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 				acceptances.clear();
 				for(int i = 0; i < responses.size();i++) { // se eu aceitar um pedido, rejeitar todos os outros
 					ACLMessage response = ((ACLMessage)responses.get(i));
-					if(i == position) {
+					if(i == position) { // apenas um accept!
+						this.selected_property = new Property(response.getContent().split("/")[1]);
 						ACLMessage accept = response.createReply();
 						accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 						accept.setContent(response.getContent().split("/")[0]);
@@ -190,10 +193,12 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	protected void handleInform(ACLMessage inform) {
 		System.out.println("Inform recebido");
 		//System.out.println(inform);
-
+		this.buyer.setProperty(selected_property);
 		Integer price_payed = Integer.parseInt(inform.getContent());
 		this.buyer.increaseMoney(-price_payed);
-		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€");
+		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€ por esta casa:\n\t\t " +
+							this.buyer.getProperty() + ",\nprocurava esta:\n\t\t " + this.buyer.getDesiredProperty()+
+							"\ncom um preço estimado de:\n\t\t" + this.buyer.getDesiredProperty().evaluateHouse() );
 	}
 	
 	private double generateRandomDistribution(int times) {

@@ -42,7 +42,7 @@ public class Seller extends Person{
 	}
 	
 	public void setup() {
-		System.out.println("Let's sell this property for: " + this.getProperty().getPrice() + "€");
+		System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
 		SequentialBehaviour seq = new SequentialBehaviour();
 		seq.addSubBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		addBehaviour(seq);

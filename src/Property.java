@@ -39,7 +39,7 @@ public class Property implements java.io.Serializable{
 	}
 	
 	private void calculatePropertyPrice() {
-		double usage = rnd.nextDouble() * 0.1 + 0.95;
+		double usage = rnd.nextDouble() * 0.1 + 0.95; //desgaste ou bom cuidado da casa
 		int standard_evaluation = this.evaluateHouse();
 		setPrice((int)(standard_evaluation * usage));
 	}
@@ -76,6 +76,18 @@ public class Property implements java.io.Serializable{
 	}
 	
 	static public double relativePropertyDifference(Property p1, Property p2) {
+		double r = 1;
+		for(int i = 0; i < p1.attributes.size();i++) {
+			double att1 = (double)p1.attributes.get(i).getValue();
+			double att2 = (double)p2.attributes.get(i).getValue();
+			//double relation = Math.log(att2+1)/ Math.log(att1+1);
+			double relation = Math.sqrt(att2)/ Math.sqrt(att1);
+			if(relation > 1) // melhor
+				r *= Math.sqrt(relation);
+			else //pior
+				r *= relation;
+		}
+		System.out.println("                     "+p1+"  "+p2+"  "+r);
 		return 1;
 	}
 	
