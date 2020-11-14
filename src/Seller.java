@@ -1,5 +1,3 @@
-import jade.core.Agent;
-import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -7,7 +5,6 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
-import jade.proto.ContractNetResponder;
 
 public class Seller extends Person{
 	
@@ -36,18 +33,41 @@ public class Seller extends Person{
 	
 	public Seller(){
 		this.setProperty(new Property());
-		personality = Personality.NORMAL;
-		money_status = MoneyStatus.NORMAL;
-		price_change = PriceChange.NORMAL;
 	}
 	
 	public void setup() {
-		System.out.println("Let's sell this property for: " + this.getProperty().getPrice() + "€");
+		Object[] args = getArguments();
+		if(args == null) {
+			personality = Personality.NORMAL;
+			money_status = MoneyStatus.NORMAL;
+			price_change = PriceChange.NORMAL;
+		}else {
+			personality = Personality.values()[Integer.parseInt(args[0].toString())];
+			money_status = MoneyStatus.values()[Integer.parseInt(args[1].toString())];
+			price_change = PriceChange.values()[Integer.parseInt(args[2].toString())];
+		}
+		
+		System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
 		SequentialBehaviour seq = new SequentialBehaviour();
 		seq.addSubBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		addBehaviour(seq);
 		register();
 	}
+	
+	public void takeDown() {
+		try {
+			DFService.deregister(this);
+		} catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		String str = "";
+		str += this.getLocalName()+ ": ";
+		if(this.getProperty() != null)
+			str += "I was unable to sell the house ;(";
+		else
+			str += "I sold the house for " + this.getMoney();
+		System.out.println(str);
+	}	
 	
 	protected void register() {
 		DFAgentDescription dfd = new DFAgentDescription();
@@ -58,14 +78,6 @@ public class Seller extends Person{
 		dfd.addServices(sd);
 		try {
 			DFService.register(this, dfd);
-		}catch(FIPAException fe) {
-			fe.printStackTrace();
-		}
-	}
-	
-	protected void takeDown() {
-		try {
-			DFService.deregister(this);
 		}catch(FIPAException fe) {
 			fe.printStackTrace();
 		}
