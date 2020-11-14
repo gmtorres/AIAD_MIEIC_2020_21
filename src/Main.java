@@ -14,6 +14,9 @@ public class Main {
 	
 	private static int n_sellers = 10; //between 1 and 40
 	private static int n_buyers = 10;  //between 1 and 40
+
+	private static int n_reagencies = 3;
+	private static int n_reagents = 1;
 	
 	//seller
 	private static double ratio_patient = 0.2; //between 0 and 1
@@ -28,13 +31,11 @@ public class Main {
 	private static double ratio_hurry = 0.2; //between 0 and 1
 	private static double ratio_normal_calm = 0.5; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 1 and 40
-	
-	private static int n_reagencies = 0;
-	private static int n_reagents = 0;
+
 	
 	private static ArrayList<Seller> sellers = new ArrayList();
 	private static ArrayList<Buyer> buyers = new ArrayList();
-	
+
 	static Random rnd;
 	static {
 		rnd = new Random();
@@ -55,6 +56,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		createSellers(cc);
 		try {
 			Thread.sleep(100);
@@ -62,11 +64,27 @@ public class Main {
 			e.printStackTrace();
 		}
 		createBuyers(cc);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		createAgencies(cc);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		createAgents(cc);
+	
 		
 		getInteractions();
+		
 		System.out.println("\n\n");
 		cc.kill();
 		rt.shutDown();
+		
 	}
 	
 	private static void getInteractions() {
@@ -134,7 +152,7 @@ public class Main {
 		}
 	}
 	
-	private static void createRealEstateAgents (ContainerController cc) {
+	private static void createAgents (ContainerController cc) {
 		for(int i = 0; i < n_reagents; i++) {
 			AgentController agc;
 			try {

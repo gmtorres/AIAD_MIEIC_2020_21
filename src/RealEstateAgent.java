@@ -1,23 +1,31 @@
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.lang.acl.ACLMessage;
 
 import java.util.Random;
 
 public class RealEstateAgent extends Agent{
-    private RealEstateAgency agency = null;
+    private AID agency = null;
     private int agentRate;
 
-    RealEstateAgent(){
+    public RealEstateAgent(){
+    	super();
     	Random rnd = new Random();
         this.agentRate = rnd.nextInt(10);
     }
+    
+    public void setup() {
+		addBehaviour(new AgentAsksAgency(this, new ACLMessage(ACLMessage.CFP)));
+	}
 
-    public void setAgency(RealEstateAgency agency) {
+    public void setAgency(AID agency) {
         this.agency = agency;
     }
+    
 
     public void removeAgency() {
         this.agency = null;
