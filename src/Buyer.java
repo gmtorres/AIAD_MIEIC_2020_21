@@ -69,7 +69,7 @@ public class Buyer extends Person{
 		String str = "";
 		str += this.getLocalName() + ": I have " + this.getMoney() + "€";
 		if(this.getProperty() != null)
-			str += " and bought the following house: " + this.getProperty();
+			str += " and bought the following house: " + this.getProperty() + " when looking for this: " + this.getDesiredProperty();
 		else
 			str += " and was unable to buy an house like this " + this.getDesiredProperty();
 		System.out.println(str);

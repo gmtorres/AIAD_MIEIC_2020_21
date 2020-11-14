@@ -31,6 +31,8 @@ public class Seller extends Person{
 	private MoneyStatus money_status;
 	private PriceChange price_change;
 	
+	private Property old_property = null;
+	
 	public Seller(int p, int m, int c){
 		personality = Personality.values()[p];
 		money_status = MoneyStatus.values()[m];
@@ -54,9 +56,9 @@ public class Seller extends Person{
 		}
 		
 		System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
-		SequentialBehaviour seq = new SequentialBehaviour();
-		seq.addSubBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
-		addBehaviour(seq);
+
+		addBehaviour(new SellerGetsRequest(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)));
+		addBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		register();
 	}
 	
@@ -103,6 +105,11 @@ public class Seller extends Person{
 
 	public void setBestOffer(Integer bestOffer) {
 		this.bestOffer = bestOffer;
+	}
+	
+	public void sellHouse(){
+		this.old_property = this.getProperty();
+		this.setProperty(null);
 	}
 	
 	public int getMaxInteractions() {

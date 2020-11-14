@@ -12,10 +12,10 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 20; //between 1 and 40
+	private static int n_sellers = 100; //between 1 and 40
 	private static int n_buyers = 2;  //between 1 and 40
 
-	private static int n_reagencies = 2;
+	private static int n_reagencies = 1;
 	private static int n_reagents = 1;
 	
 	//seller
@@ -110,7 +110,7 @@ public class Main {
 				if(b.done())
 					buyers_done++;
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

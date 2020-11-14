@@ -84,25 +84,20 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	
 	protected void handleOutOfSequence(ACLMessage msg) {
 		//System.out.println("Seller received out of sequence");
-		//System.out.println(msg);
 	}
 	
 	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept) throws FailureException{
 		ACLMessage reply = accept.createReply();
 		if(this.seller.getProperty() != null) {
-			//System.out.println("Tenho um contrato!");
 			
 			Integer price_payed = Integer.parseInt(propose.getContent().split("/")[0]);
 			
 			reply.setPerformative(ACLMessage.INFORM);
 			reply.setContent(String.valueOf(price_payed));
-			//System.out.println("A enviar inform");
 			Property temp_prop = this.seller.getProperty();
-			this.seller.setProperty(null);
+			this.seller.sellHouse();
 			this.seller.increaseMoney(price_payed);
-			//System.out.println("Eu, " + this.seller.getLocalName() + ", fiquei com " + this.seller.getMoney() + "€, so baixava até: " + this.min_value+"€, a casa valia: " + temp_prop.getPrice()+"€");
 		}else {
-			//System.out.println("A enviar failure");
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 		return reply;

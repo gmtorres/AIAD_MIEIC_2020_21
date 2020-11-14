@@ -45,7 +45,7 @@ public class Property implements java.io.Serializable{
 	}
 	
 	private void initializeAttributes(boolean random) {
-		attributes.add(new Attribute("area_built",1500, random ? rnd.nextInt(350) + 50 : 0 ,1));
+		attributes.add(new Attribute("area_built",1500, random ? rnd.nextInt(350) + 50 : 0 ,0.5));
 		attributes.add(new Attribute("area_garden",800, random ? rnd.nextInt(150) + 5 : 0 ,0.5));
 		attributes.add(new Attribute("num_bedrooms",400,random ? rnd.nextInt(2) + 1 : 0 ,1));
 		attributes.add(new Attribute("num_wc",2500, random ? rnd.nextInt(2) + 1 : 0 ,1));
