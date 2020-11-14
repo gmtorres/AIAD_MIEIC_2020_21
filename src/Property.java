@@ -88,7 +88,7 @@ public class Property implements java.io.Serializable{
 				r *= relation;
 		}
 		System.out.println("                     "+p1+"  "+p2+"  "+r);
-		return 1;
+		return r;
 	}
 	
 	public int getPrice() {

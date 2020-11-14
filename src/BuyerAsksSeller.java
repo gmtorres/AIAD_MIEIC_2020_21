@@ -60,16 +60,17 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			
 			// diferença relativa entre o preço proposto e o que o buyer tem, se for muito maior, não vale a pena negociar
 			double relativeDifference = (double)(proposed_price - this.buyer.getMoney() ) / (double)this.buyer.getMoney();
-			if(relativeDifference > 0.2) { // diferença muito alta, não interessado, não vale a pena negociar
+			double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getDesiredProperty(), proposed_property);
+			
+			if(relativeDifference > 0.2 || relativePropertyValue < 0.7) { // diferença muito alta ou casa muito diferente, não interessado, não vale a pena negociar
 				System.out.println("Preço muito alto, não vou negociar");
 				ACLMessage reply = response.createReply();
 				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
-				acceptances.add(reply);
+				replies.add(reply);
 				continue; 
 			}else { // negociar ou se diferença < 0 posso aceitar ou negociar
 				System.out.println("Vou negociar");
 				double relativePropertyPrice = (double)standard_price / (double)proposed_price;
-				double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getDesiredProperty(), proposed_property);
 
 				double factor = relativePropertyPrice * relativePropertyValue; // quality for the price
 				
@@ -80,7 +81,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					Integer diff;
 					
 					//quanto maior a diferença de preço, menos posso pedir em comparação com o meu
-					System.out.println("");
+					/*System.out.println("");
 					
 					System.out.println(proposed_price);
 					System.out.println(this.buyer.getMoney());
@@ -104,7 +105,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					System.out.println((1/relativePropertyPrice + 0.5)*(this.generateRandomDistribution(5)*  0.25 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
 					System.out.println("");
 					
-					System.out.println("");
+					*/System.out.println("");
 					diff = (int) (
 								( 1 / relativePropertyPrice + 0.25)
 								* (this.generateRandomDistribution(5)*  0.125 + 1) 
@@ -118,7 +119,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					System.out.println("Tenho dinheiro, vou avaliar a situação");
 					valid_proposals++;
 					Integer new_proposal;
-					if(relativePropertyPrice > 1) { // preço proposto é maior que o preço da propriedade
+					if(relativePropertyPrice < 1) { // preço proposto é maior que o preço da propriedade
 						new_proposal = (int)(standard_price - (1 + 0.5) * (proposed_price - standard_price));
 					}else { // preço proposto é menor que o preço da propriedade, tentar descer a proposta, mas não muito, para não abusar
 						new_proposal = (int) (proposed_price - 0.5*(proposed_price - 0.90 * standard_price));

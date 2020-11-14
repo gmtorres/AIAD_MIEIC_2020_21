@@ -1,5 +1,4 @@
 import java.util.Random;
-
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -22,19 +21,36 @@ public class Buyer extends Person{
 	
 	public Buyer(){
 		Random rnd = new Random();
-		setMoney(rnd.nextInt(500000) + 70000);
-		setMoney(100000);
+		//setMoney(rnd.nextInt(60000) + 70000);
+		//setMoney(100000);
 		
 		this.property = null;
 		this.desired_property = new Property();
 		this.setMoney((int) (this.desired_property.evaluateHouse() * (0.9 + rnd.nextFloat() * 0.5)));
 		
-		looking_state = Looking.CALM;
+
 	}
 	
 	public void setup() {
+		Object[] args = getArguments();
+		if(args == null) {
+			looking_state = Looking.CALM;
+		}else {
+			looking_state = Looking.values()[Integer.parseInt(args[0].toString())];
+		}
+		
 		System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
 		addBehaviour(new BuyerAsksSeller(this, new ACLMessage(ACLMessage.CFP)));
+	}
+	
+	public void takeDown() {
+		String str = "";
+		str += this.getLocalName() + ": I have " + this.getMoney() + "€";
+		if(this.getProperty() != null)
+			str += " and bought the following house: " + this.getProperty();
+		else
+			str += " and was unable to buy an house";
+		System.out.println(str);
 	}
 	
 	public Property getDesiredProperty() {
@@ -58,7 +74,7 @@ public class Buyer extends Person{
 	public double getBestFactor() {
 		switch(looking_state) {
 		case HURRY:
-			return 1;
+			return 0.9;
 		case CALM:
 			return 1.1;
 		case BEST:
@@ -82,7 +98,7 @@ public class Buyer extends Person{
 	public double getWorstFactor() {
 		switch(looking_state) {
 		case HURRY:
-			return 0.85;
+			return 0.80;
 		case CALM:
 			return 1;
 		case BEST:
