@@ -22,15 +22,17 @@ public class AgencyRespondsAgent extends ProposeResponder {
 		
 		ACLMessage reply = cfp.createReply();
 		
-		if(agency.getAgentMinRate() < num || agency.getAgentMaxRate() > num) {
+		
+		if(num < agency.getAgentMinRate() || num > agency.getAgentMaxRate()) {
+			System.out.println("AGENCIA: Recusei" +  agency.getAgentMinRate() + "   " + agency.getAgentMaxRate());
 			reply.setPerformative(ACLMessage.REFUSE);
 			return reply;
 		}
 		
 		reply.setPerformative(ACLMessage.PROPOSE);
 		
-		reply.setContent("Aceitei a tua proposta");
-		
+		reply.setContent("");
+				
 		return reply;
 	}
 	

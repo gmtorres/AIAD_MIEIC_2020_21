@@ -10,8 +10,8 @@ public class Main {
 	
 	private static int n_sellers = 5;
 	private static int n_buyers = 1;
-	private static int n_reagencies = 0;
-	private static int n_reagents = 0;
+	private static int n_reagencies = 3;
+	private static int n_reagents = 1;
 	
 	public static void main(String[] str) throws StaleProxyException {
 		Runtime rt = Runtime.instance();
@@ -27,6 +27,7 @@ public class Main {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		createSellers(cc);
 		try {
 			Thread.sleep(100);
@@ -34,6 +35,18 @@ public class Main {
 			e.printStackTrace();
 		}
 		createBuyers(cc);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		createAgencies(cc);
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		createAgents(cc);
 	}
 	
 	private static void createSellers(ContainerController cc) {
@@ -73,7 +86,7 @@ public class Main {
 		}
 	}
 	
-	private static void createRealEstateAgents (ContainerController cc) {
+	private static void createAgents (ContainerController cc) {
 		for(int i = 0; i < n_reagents; i++) {
 			AgentController agc;
 			try {
