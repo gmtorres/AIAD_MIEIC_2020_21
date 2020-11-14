@@ -31,6 +31,13 @@ public class Seller extends Person{
 	private MoneyStatus money_status;
 	private PriceChange price_change;
 	
+	public Seller(int p, int m, int c){
+		this();
+		personality = Personality.values()[p];
+		money_status = MoneyStatus.values()[m];
+		price_change = PriceChange.values()[c];
+	}
+	
 	public Seller(){
 		this.setProperty(new Property());
 	}

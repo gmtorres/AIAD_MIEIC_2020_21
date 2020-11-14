@@ -3,6 +3,7 @@ import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import jade.core.Profile;
@@ -11,8 +12,8 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 30; //between 1 and 40
-	private static int n_buyers = 3;  //between 1 and 40
+	private static int n_sellers = 10; //between 1 and 40
+	private static int n_buyers = 10;  //between 1 and 40
 	
 	//seller
 	private static double ratio_patient = 0.2; //between 0 and 1
@@ -30,6 +31,9 @@ public class Main {
 	
 	private static int n_reagencies = 0;
 	private static int n_reagents = 0;
+	
+	private static ArrayList<Seller> sellers = new ArrayList();
+	private static ArrayList<Buyer> buyers = new ArrayList();
 	
 	static Random rnd;
 	static {
@@ -59,14 +63,26 @@ public class Main {
 		}
 		createBuyers(cc);
 		
-		try {
-			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		getInteractions();
 		System.out.println("\n\n");
 		cc.kill();
 		rt.shutDown();
+	}
+	
+	private static void getInteractions() {
+		int buyers_done = 0;
+		while(buyers_done < buyers.size()) {
+			buyers_done = 0;
+			for(Buyer b : buyers)
+				if(b.done())
+					buyers_done++;
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println(buyers_done);
+		}
 	}
 	
 	private static void createSellers(ContainerController cc) {
@@ -78,13 +94,11 @@ public class Main {
 			int m = getInterval(temp2);
 			double[] temp3 = {ratio_flexible,ratio_normal_change};
 			int c = getInterval(temp3);
-			Object[] args = new Object[3];
-			args[0] = p;
-			args[1] = m;
-			args[2] = c;
+			Seller seller = new Seller(p,m,c);
 			try {		
-				agc = cc.createNewAgent("Vendedor_" + String.valueOf(i),"Seller",args);
+				agc = cc.acceptNewAgent("Vendedor_" + String.valueOf(i),seller);
 				agc.start();
+				sellers.add(seller);
 			} catch (StaleProxyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -96,11 +110,11 @@ public class Main {
 			AgentController agc;
 			double[] temp1 = {ratio_hurry,ratio_normal_calm,ratio_best};
 			int p = getInterval(temp1);
-			Object[] args = new Object[3];
-			args[0] = p;
+			Buyer buyer = new Buyer(p);
 			try {
-				agc = cc.createNewAgent("Comprador_" + String.valueOf(i),"Buyer",args);
+				agc = cc.acceptNewAgent("Comprador_" + String.valueOf(i),buyer);
 				agc.start();
+				buyers.add(buyer);
 			} catch (StaleProxyException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

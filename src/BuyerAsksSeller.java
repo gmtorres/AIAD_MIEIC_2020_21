@@ -28,14 +28,11 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero comprar!");
 		DFAgentDescription[] sellers = this.buyer.searchForSeller();
-		//System.out.println("Vou enviar a proposta a " + sellers.length + " vendedores.");
 		for (int i = 0; i < sellers.length; i++) {
 			String name = sellers[i].getName().getName();
-			//System.out.println(name);
 			cfp.addReceiver(sellers[i].getName());
 		}
 		v.add(cfp);
-		//System.out.println("Enviado, siga comprar!");
 		return v;		
 	}
 	
@@ -79,33 +76,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					ACLMessage reply = response.createReply();
 					reply.setPerformative(ACLMessage.CFP);
 					Integer diff;
-					
-					//quanto maior a diferença de preço, menos posso pedir em comparação com o meu
-					/*System.out.println("");
-					
-					System.out.println(proposed_price);
-					System.out.println(this.buyer.getMoney());
-					System.out.println(standard_price);
-					System.out.println( (int) ((this.generateRandomDistribution(5)*  0.5 + 1) * (proposed_price - this.buyer.getMoney())));
-					
-					System.out.println("");
-					
-					System.out.println(proposed_price - this.buyer.getMoney());
-					System.out.println(relativeDifference);
-					System.out.println((0.2-relativeDifference)/0.2);
-					System.out.println(((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
-					System.out.println((this.generateRandomDistribution(5)*  0.5 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
-					
-					System.out.println("");
-					
-					System.out.println(relativePropertyPrice);
-					System.out.println(1/relativePropertyPrice);
-					System.out.println(1/relativePropertyPrice + 1);
-					System.out.println(proposed_price - standard_price);
-					System.out.println((1/relativePropertyPrice + 0.5)*(this.generateRandomDistribution(5)*  0.25 + 1) * ((0.2-relativeDifference)/0.2) * (proposed_price - this.buyer.getMoney()) );
-					System.out.println("");
-					
-					*/System.out.println("");
+				
 					diff = (int) (
 								( 1 / relativePropertyPrice + 0.25)
 								* (this.generateRandomDistribution(5)*  0.125 + 1) 
@@ -173,17 +144,6 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 				this.newIteration(replies);
 			}	
 		}
-		
-		
-		
-		/*if(position != -1) {
-			ACLMessage accept = ((ACLMessage)responses.get(position)).createReply();
-			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
-			acceptances.add(accept);
-			System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
-		}else {
-			System.out.println("Não aceitei nenhum preço");
-		}*/
 	}
 	
 	protected void handleFailure(ACLMessage inform) {
@@ -193,7 +153,6 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	
 	protected void handleInform(ACLMessage inform) {
 		System.out.println("Inform recebido");
-		//System.out.println(inform);
 		this.buyer.setProperty(selected_property);
 		Integer price_payed = Integer.parseInt(inform.getContent());
 		this.buyer.increaseMoney(-price_payed);

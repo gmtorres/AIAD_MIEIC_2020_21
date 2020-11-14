@@ -1,5 +1,6 @@
 import java.util.Random;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -19,16 +20,26 @@ public class Buyer extends Person{
 	private Property desired_property;
 	private Property property;
 	
+	private Behaviour getHouse = null;
+	
 	public Buyer(){
 		Random rnd = new Random();
-		//setMoney(rnd.nextInt(60000) + 70000);
-		//setMoney(100000);
 		
 		this.property = null;
 		this.desired_property = new Property();
 		this.setMoney((int) (this.desired_property.evaluateHouse() * (0.9 + rnd.nextFloat() * 0.5)));
-		
-
+	}
+	
+	public Buyer(int l) {
+		this();
+		looking_state = Looking.values()[l];
+	}
+	
+	public boolean done() {
+		if(getHouse == null)
+			return false;
+		String a = getHouse.getExecutionState();
+		return getHouse.done();
 	}
 	
 	public void setup() {
@@ -40,7 +51,8 @@ public class Buyer extends Person{
 		}
 		
 		System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
-		addBehaviour(new BuyerAsksSeller(this, new ACLMessage(ACLMessage.CFP)));
+		getHouse = new BuyerAsksSeller(this, new ACLMessage(ACLMessage.CFP));
+		addBehaviour(getHouse);
 	}
 	
 	public void takeDown() {
