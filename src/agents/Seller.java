@@ -1,3 +1,6 @@
+package agents;
+import behaviours.SellerGetsRequest;
+import behaviours.SellerRespondsBuyer_2;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -5,6 +8,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import utils.Property;
 
 public class Seller extends Person{
 	
@@ -73,7 +77,7 @@ public class Seller extends Person{
 		if(this.getProperty() != null)
 			str += "I was unable to sell this house " + this.getProperty();
 		else
-			str += "I sold this house " + this.getProperty() + " for " + this.getMoney();
+			str += "I sold this house " + this.old_property + " for " + this.getMoney() + "€";
 		System.out.println(str);
 	}	
 	

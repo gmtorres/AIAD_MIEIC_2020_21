@@ -1,3 +1,5 @@
+package behaviours;
+import agents.RealEstateAgent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.AchieveREResponder;

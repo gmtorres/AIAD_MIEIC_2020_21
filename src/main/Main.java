@@ -1,3 +1,4 @@
+package main;
 import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
@@ -6,6 +7,7 @@ import jade.wrapper.StaleProxyException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import agents.*;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 
@@ -13,10 +15,10 @@ import jade.core.ProfileImpl;
 public class Main {
 	
 	private static int n_sellers = 100; //between 1 and 40
-	private static int n_buyers = 2;  //between 1 and 40
+	private static int n_buyers = 20;  //between 1 and 40
 
 	private static int n_reagencies = 1;
-	private static int n_reagents = 1;
+	private static int n_reagents = 5;
 	
 	//seller
 	private static double ratio_patient = 0.2; //between 0 and 1
@@ -158,8 +160,9 @@ public class Main {
 	private static void createAgencies (ContainerController cc) {
 		for(int i = 0; i < n_reagencies; i++) {
 			AgentController agc;
+			RealEstateAgency agency = new RealEstateAgency();
 			try {
-				agc = cc.createNewAgent("Agencia_" + String.valueOf(i),"RealEstateAgency",null);
+				agc = cc.acceptNewAgent("Agencia_" + String.valueOf(i),agency);
 				agc.start();
 			} catch (StaleProxyException e) {
 				e.printStackTrace();

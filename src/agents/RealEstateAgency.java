@@ -1,6 +1,9 @@
+package agents;
 import java.util.ArrayList;
 import java.util.Random;
 
+import behaviours.AgencyGetsRequest;
+import behaviours.AgencyRespondsAgent;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.SequentialBehaviour;

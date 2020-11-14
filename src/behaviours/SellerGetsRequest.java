@@ -1,3 +1,5 @@
+package behaviours;
+import agents.Seller;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -21,7 +23,8 @@ public class SellerGetsRequest extends AchieveREResponder{
 	protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) {
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
-		reply.setContent(this.seller.getProperty().toString());
+		if(this.seller.getProperty() != null)
+			reply.setContent(this.seller.getProperty().toString());
 		return reply;
 	}
 	

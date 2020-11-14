@@ -1,3 +1,4 @@
+package agents;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -10,6 +11,9 @@ import jade.lang.acl.MessageTemplate;
 
 import java.util.Random;
 
+import behaviours.AgentAsksAgency;
+import behaviours.RealEstateAgentGetsRequest;
+
 public class RealEstateAgent extends Agent{
     private AID agency = null;
     private int agentRate;
@@ -18,7 +22,7 @@ public class RealEstateAgent extends Agent{
     public RealEstateAgent(){
     	super();
     	Random rnd = new Random();
-        this.agentRate = rnd.nextInt(10);
+        this.agentRate = rnd.nextInt(8) + 1;
     }
     
     public void setup() {

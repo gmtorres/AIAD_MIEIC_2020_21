@@ -1,10 +1,13 @@
+package behaviours;
 import java.util.Random;
 
+import agents.Seller;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.proto.SSContractNetResponder;
 import jade.proto.SSIteratedContractNetResponder;
+import utils.Property;
 
 public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetResponder{
 	

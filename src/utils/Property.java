@@ -1,3 +1,4 @@
+package utils;
 import java.util.Random;
 import java.util.ArrayList;
 
@@ -16,12 +17,12 @@ public class Property implements java.io.Serializable{
 	private Integer num_wc;
 	//private boolean heating;
 	
-	Property(){ // generate a house with random attributes
+	public Property(){ // generate a house with random attributes
 		initializeAttributes(true);
 		calculatePropertyPrice();
 	}
 	
-	Property(int area_built, int area_garden, int num_bed, int num_wc){ // generate a house with attributes passed by parameters
+	public Property(int area_built, int area_garden, int num_bed, int num_wc){ // generate a house with attributes passed by parameters
 		initializeAttributes(false);
 		this.setAttribute("area_built",area_built);
 		this.setAttribute("area_garden",area_garden);
@@ -30,7 +31,7 @@ public class Property implements java.io.Serializable{
 		calculatePropertyPrice();
 	}
 	
-	Property(String description){ // generate a generic house from a string, does not set the house price
+	public Property(String description){ // generate a generic house from a string, does not set the house price
 		initializeAttributes(false);
 		String [] entries = description.split(",");
 		for(int i = 0; i < entries.length; i++) {

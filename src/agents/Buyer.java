@@ -1,6 +1,9 @@
+package agents;
 import java.util.ArrayList;
 import java.util.Random;
 
+import behaviours.BuyerAsksSeller;
+import behaviours.BuyerContactsAgency;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
@@ -9,6 +12,7 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import utils.Property;
 
 public class Buyer extends Person{
 	

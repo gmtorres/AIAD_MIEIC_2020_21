@@ -1,3 +1,5 @@
+package behaviours;
+import agents.RealEstateAgency;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;

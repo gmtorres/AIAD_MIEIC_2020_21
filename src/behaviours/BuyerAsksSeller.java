@@ -1,12 +1,15 @@
+package behaviours;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
+import agents.Buyer;
 import jade.core.AID;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;
 import jade.proto.ContractNetInitiator;
+import utils.Property;
 
 public class BuyerAsksSeller extends ContractNetInitiator  {
 	
@@ -22,12 +25,10 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		super(buyer, cfp);
 		this.buyer = buyer;
 		this.selected_property = null;
-		System.out.println("heyyy");
 	}
 	
 
 	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
-		System.out.println("oiii");
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero comprar!");
 		ArrayList<AID> sellers = this.buyer.getSellers();
@@ -150,7 +151,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	
 	protected void handleFailure(ACLMessage inform) {
 		//System.out.println("Failure recebido");
-		//this.reset(new ACLMessage(ACLMessage.CFP));
+		this.reset(new ACLMessage(ACLMessage.CFP));
 	}
 	
 	protected void handleInform(ACLMessage inform) {

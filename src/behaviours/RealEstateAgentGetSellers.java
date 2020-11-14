@@ -1,6 +1,8 @@
+package behaviours;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import agents.RealEstateAgent;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.DataStore;
@@ -8,6 +10,7 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 import jade.proto.AchieveREResponder;
+import utils.Property;
 
 public class RealEstateAgentGetSellers extends AchieveREInitiator {
 	RealEstateAgent REagent;
@@ -39,18 +42,24 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 	protected void handleAllResultNotifications(Vector resultNotifications) {
 		String content = "";
 		Property desired = new Property(this.clientRequest.getContent());
+		int accepted = 0;
 		
 		for(int i = 0; i < resultNotifications.size(); i++) {
 			ACLMessage response = (ACLMessage) resultNotifications.get(i);
 			if(response.getPerformative() == ACLMessage.INFORM) {
-				Property proposed = new Property(response.getContent());
+				String r_content = response.getContent();
+				if(r_content == null || (r_content != null && r_content.equals("")))
+					continue;
+				Property proposed = new Property(r_content);
 				double factor = Property.relativePropertyDifference(desired, proposed);
 				if(factor >= 0.75) {
 					AID sender = response.getSender();
 					content+= sender + ",";
+					accepted++;
 				}
 			}
 		}
+		System.out.println(accepted);
 		
 		ACLMessage response = clientRequest.createReply();
 		response.setPerformative(ACLMessage.INFORM);

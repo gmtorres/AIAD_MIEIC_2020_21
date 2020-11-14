@@ -1,7 +1,9 @@
+package behaviours;
 import jade.proto.ContractNetInitiator;
 
 import java.util.Vector;
 
+import agents.RealEstateAgent;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.UnreadableException;

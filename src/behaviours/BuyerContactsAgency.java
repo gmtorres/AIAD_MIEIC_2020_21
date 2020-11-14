@@ -1,6 +1,8 @@
+package behaviours;
 import java.io.StringReader;
 import java.util.Vector;
 
+import agents.Buyer;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -42,7 +44,7 @@ public class BuyerContactsAgency extends AchieveREInitiator {
 			return;
 		String[] sellers = content.split(",");
 		for(String s: sellers) {
-			System.out.println(s);
+			//System.out.println(s);
 			StringACLCodec codec = new StringACLCodec(new StringReader(s), null);
 			AID new_aid = new AID();
 			try {

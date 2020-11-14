@@ -1,5 +1,7 @@
+package behaviours;
 import java.io.IOException;
 
+import agents.Seller;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
