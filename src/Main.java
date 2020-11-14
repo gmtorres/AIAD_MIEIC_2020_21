@@ -12,10 +12,10 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 10; //between 1 and 40
-	private static int n_buyers = 10;  //between 1 and 40
+	private static int n_sellers = 20; //between 1 and 40
+	private static int n_buyers = 2;  //between 1 and 40
 
-	private static int n_reagencies = 3;
+	private static int n_reagencies = 2;
 	private static int n_reagents = 1;
 	
 	//seller
@@ -35,6 +35,8 @@ public class Main {
 	
 	private static ArrayList<Seller> sellers = new ArrayList();
 	private static ArrayList<Buyer> buyers = new ArrayList();
+	
+	private static ArrayList<RealEstateAgent> reagents = new ArrayList();
 
 	static Random rnd;
 	static {
@@ -58,26 +60,23 @@ public class Main {
 		}
 		
 		createSellers(cc);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		createBuyers(cc);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		
 		createAgencies(cc);
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		
 		createAgents(cc);
-	
+		
+		waitForAgents();
+		
+		try {
+			Thread.sleep(100);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		createBuyers(cc);
 		
 		getInteractions();
 		
@@ -85,6 +84,22 @@ public class Main {
 		cc.kill();
 		rt.shutDown();
 		
+	}
+	
+	private static void waitForAgents() {
+		int reas_done = 0;
+		while(reas_done < buyers.size()) {
+			reas_done = 0;
+			for(RealEstateAgent rea : reagents)
+				if(rea.done())
+					reas_done++;
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println(reas_done);
+		}
 	}
 	
 	private static void getInteractions() {
@@ -156,9 +171,10 @@ public class Main {
 		for(int i = 0; i < n_reagents; i++) {
 			AgentController agc;
 			try {
-				
-				agc = cc.createNewAgent("RealEstateAgent_" + String.valueOf(i), "RealEstateAgent", null);
+				RealEstateAgent rea = new RealEstateAgent();
+				agc = cc.acceptNewAgent("RealEstateAgent_" + String.valueOf(i), rea);
 				agc.start();
+				reagents.add(rea);
 			} catch (StaleProxyException e ) {
 				e.printStackTrace();
 			}

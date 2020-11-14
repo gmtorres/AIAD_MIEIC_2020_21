@@ -28,6 +28,7 @@ public class RealEstateAgency extends Agent{
     
     public void setup() {
 		addBehaviour(new AgencyRespondsAgent(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
+		addBehaviour(new AgencyGetsRequest(this,MessageTemplate.MatchPerformative(ACLMessage.REQUEST)));
 		register();
 	}
     
@@ -72,6 +73,13 @@ public class RealEstateAgency extends Agent{
 
     public void removeAgent (AID agent) {
         agents.remove(agent);
+    }
+    
+    public AID getRandomAgent () {
+    	Random rnd = new Random();
+    	if(this.agents.size() == 0)
+    		return null;
+        return this.agents.get(rnd.nextInt(this.agents.size()));
     }
 
     public int getAgentMinRate() {

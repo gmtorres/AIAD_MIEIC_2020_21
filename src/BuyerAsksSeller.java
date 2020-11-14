@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
@@ -21,16 +22,17 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		super(buyer, cfp);
 		this.buyer = buyer;
 		this.selected_property = null;
+		System.out.println("heyyy");
 	}
 	
 
 	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
+		System.out.println("oiii");
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero comprar!");
-		DFAgentDescription[] sellers = this.buyer.searchForSeller();
-		for (int i = 0; i < sellers.length; i++) {
-			String name = sellers[i].getName().getName();
-			cfp.addReceiver(sellers[i].getName());
+		ArrayList<AID> sellers = this.buyer.getSellers();
+		for (AID s : sellers) {
+			cfp.addReceiver(s);
 		}
 		v.add(cfp);
 		return v;		
@@ -60,19 +62,19 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getDesiredProperty(), proposed_property);
 			
 			if(relativeDifference > 0.2 || relativePropertyValue < 0.7) { // diferença muito alta ou casa muito diferente, não interessado, não vale a pena negociar
-				System.out.println("Preço muito alto, não vou negociar");
+				//System.out.println("Preço muito alto, não vou negociar");
 				ACLMessage reply = response.createReply();
 				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
 				replies.add(reply);
 				continue; 
 			}else { // negociar ou se diferença < 0 posso aceitar ou negociar
-				System.out.println("Vou negociar");
+				//System.out.println("Vou negociar");
 				double relativePropertyPrice = (double)standard_price / (double)proposed_price;
 
 				double factor = relativePropertyPrice * relativePropertyValue; // quality for the price
 				
 				if(relativeDifference > 0) { // preciso mesmo de negociar para baixo, não tenho dinheiro
-					System.out.println("Preço acima do que posso pagar, vou tentar descer");
+					//System.out.println("Preço acima do que posso pagar, vou tentar descer");
 					ACLMessage reply = response.createReply();
 					reply.setPerformative(ACLMessage.CFP);
 					Integer diff;
@@ -113,7 +115,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			if(bestFactor > this.buyer.getBestFactor() || // boa oferta pelo preço da casa
 			   (valid_proposals <  this.buyer.getMinValid() && bestFactor > this.buyer.getWorstFactor())) { // se houverem poucas ofertas, mais vale ficar com uma do que a arder
 				
-				System.out.println("Vou aceitar a proposta do vendedor");
+				//System.out.println("Vou aceitar a proposta do vendedor");
 				acceptances.clear();
 				for(int i = 0; i < responses.size();i++) { // se eu aceitar um pedido, rejeitar todos os outros
 					ACLMessage response = ((ACLMessage)responses.get(i));
@@ -133,7 +135,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 				System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
 			}else { // tenho dinheiro, mas nenhuma oferta é sufecientemente boa
 				if(replies.isEmpty() == false) {
-					System.out.println("A mandar nova iteração");
+					//System.out.println("A mandar nova iteração");
 					this.newIteration(replies);
 				}	
 			}
@@ -147,12 +149,12 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	}
 	
 	protected void handleFailure(ACLMessage inform) {
-		System.out.println("Failure recebido");
+		//System.out.println("Failure recebido");
 		//this.reset(new ACLMessage(ACLMessage.CFP));
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		System.out.println("Inform recebido");
+		//System.out.println("Inform recebido");
 		this.buyer.setProperty(selected_property);
 		Integer price_payed = Integer.parseInt(inform.getContent());
 		this.buyer.increaseMoney(-price_payed);

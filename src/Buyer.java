@@ -1,4 +1,7 @@
+import java.util.ArrayList;
 import java.util.Random;
+
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.domain.DFService;
@@ -22,9 +25,10 @@ public class Buyer extends Person{
 	
 	private Behaviour getHouse = null;
 	
+	private ArrayList<AID> sellers = new ArrayList();
+	
 	public Buyer(){
 		Random rnd = new Random();
-		
 		this.property = null;
 		this.desired_property = new Property();
 		this.setMoney((int) (this.desired_property.evaluateHouse() * (0.9 + rnd.nextFloat() * 0.5)));
@@ -35,10 +39,16 @@ public class Buyer extends Person{
 		looking_state = Looking.values()[l];
 	}
 	
+	public void initiateSellersInteraction() {
+		getHouse = new BuyerAsksSeller(this, new ACLMessage(ACLMessage.CFP));
+		addBehaviour(getHouse);
+	}
+	
 	public boolean done() {
 		if(getHouse == null)
 			return false;
 		String a = getHouse.getExecutionState();
+		//System.out.println(this.getLocalName() + "  " + a);
 		return getHouse.done();
 	}
 	
@@ -50,9 +60,9 @@ public class Buyer extends Person{
 			looking_state = Looking.values()[Integer.parseInt(args[0].toString())];
 		}
 		
+		this.addBehaviour(new BuyerContactsAgency(this,new ACLMessage(ACLMessage.REQUEST)));
+		
 		System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
-		getHouse = new BuyerAsksSeller(this, new ACLMessage(ACLMessage.CFP));
-		addBehaviour(getHouse);
 	}
 	
 	public void takeDown() {
@@ -61,8 +71,19 @@ public class Buyer extends Person{
 		if(this.getProperty() != null)
 			str += " and bought the following house: " + this.getProperty();
 		else
-			str += " and was unable to buy an house";
+			str += " and was unable to buy an house like this " + this.getDesiredProperty();
 		System.out.println(str);
+	}
+	public ArrayList<AID> getSellers(){
+		return this.sellers;
+	}
+	
+	public void addSeller(AID new_aid) {
+		for(AID a : sellers) {
+			if(a.equals(new_aid))
+				return;
+		}
+		sellers.add(new_aid);
 	}
 	
 	public Property getDesiredProperty() {
@@ -73,6 +94,20 @@ public class Buyer extends Person{
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd = new ServiceDescription();
 		sd.setType("seller");
+		template.addServices(sd);
+		DFAgentDescription[] result = null;
+		try {
+			result = DFService.search(this, template);
+		}catch(FIPAException fe) {
+			fe.printStackTrace();
+		}
+		return result;
+	}
+	
+	public DFAgentDescription[] searchForAgencies() {
+		DFAgentDescription template = new DFAgentDescription();
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("RealEstateAgency");
 		template.addServices(sd);
 		DFAgentDescription[] result = null;
 		try {

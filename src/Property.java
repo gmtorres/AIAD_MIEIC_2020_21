@@ -45,10 +45,10 @@ public class Property implements java.io.Serializable{
 	}
 	
 	private void initializeAttributes(boolean random) {
-		attributes.add(new Attribute("area_built",1500, random ? rnd.nextInt(350) + 50 : 0 ));
-		attributes.add(new Attribute("area_garden",800, random ? rnd.nextInt(150) + 5 : 0 ));
-		attributes.add(new Attribute("num_bedrooms",400,random ? rnd.nextInt(2) + 1 : 0 ));
-		attributes.add(new Attribute("num_wc",2500, random ? rnd.nextInt(2) + 1 : 0 ));
+		attributes.add(new Attribute("area_built",1500, random ? rnd.nextInt(350) + 50 : 0 ,1));
+		attributes.add(new Attribute("area_garden",800, random ? rnd.nextInt(150) + 5 : 0 ,0.5));
+		attributes.add(new Attribute("num_bedrooms",400,random ? rnd.nextInt(2) + 1 : 0 ,1));
+		attributes.add(new Attribute("num_wc",2500, random ? rnd.nextInt(2) + 1 : 0 ,1));
 	}
 	
 	private void setAttribute(String d, int value) {
@@ -62,24 +62,20 @@ public class Property implements java.io.Serializable{
 	}
 	
 	public int evaluateHouse(){
-		/*int evaluation = (area_built + area_garden) * 800 +
-				area_built * 700 +
-				num_bedrooms * 4000 +
-				num_wc * 2500;*/
 		int evaluation = 0;
 		for(int i = 0; i < this.attributes.size();i++) {
 			Attribute att = this.attributes.get(i);
 			evaluation += att.getValue() * att.getPrice();
 		}
-		//evaluation = 100000;
 		return evaluation;
 	}
 	
 	static public double relativePropertyDifference(Property p1, Property p2) {
 		double r = 1;
 		for(int i = 0; i < p1.attributes.size();i++) {
-			double att1 = (double)p1.attributes.get(i).getValue();
-			double att2 = (double)p2.attributes.get(i).getValue();
+			double w = p1.attributes.get(i).getWeight();
+			double att1 = (double)p1.attributes.get(i).getValue() * w;
+			double att2 = (double)p2.attributes.get(i).getValue() * w;
 			//double relation = Math.log(att2+1)/ Math.log(att1+1);
 			double relation = Math.sqrt(att2)/ Math.sqrt(att1);
 			if(relation > 1) // melhor
@@ -87,7 +83,7 @@ public class Property implements java.io.Serializable{
 			else //pior
 				r *= relation;
 		}
-		System.out.println("                     "+p1+"  "+p2+"  "+r);
+		System.out.println("      "+p1+"  "+p2+"  "+r);
 		return r;
 	}
 	
@@ -101,32 +97,9 @@ public class Property implements java.io.Serializable{
 	private void parseEntry(String description) {
 		String [] parts = description.split(":");
 		this.setAttribute(parts[0], Integer.parseInt(parts[1]));
-		/*Integer value;
-		switch(parts[0]) {
-		case "built":
-			value = Integer.parseInt(parts[1]);
-			this.area_built = value;
-			break;
-		case "garden":
-			value = Integer.parseInt(parts[1]);
-			this.area_garden = value;
-			break;
-		case "num_bed":
-			value = Integer.parseInt(parts[1]);
-			this.num_bedrooms = value;
-			break;
-		case "num_wc":
-			value = Integer.parseInt(parts[1]);
-			this.num_wc = value;
-			break;
-		}*/
 	}
 	
 	public String toString() {
-		/*return "built:" + this.area_built + 
-				",garden:" + this.area_garden +
-				",num_bed:" + this.num_bedrooms + 
-				",num_wc:" + this.num_wc;*/
 		String str = "";
 		for(int i = 0; i < this.attributes.size();i++) {
 			Attribute att = this.attributes.get(i);
@@ -142,11 +115,13 @@ public class Property implements java.io.Serializable{
 		private String description;
 		private int value;
 		private int price;
+		private double weight;
 		
-		Attribute(String d, Integer price, Integer vl){
+		Attribute(String d, Integer price, Integer vl, double weight){
 			this.setDescription(d);
 			this.setPrice(price);
 			this.setValue(vl);
+			this.setWeight(weight);
 		}
 		public String getDescription() {
 			return description;
@@ -165,6 +140,12 @@ public class Property implements java.io.Serializable{
 		}
 		public void setPrice(int price) {
 			this.price = price;
+		}
+		public double getWeight() {
+			return 1/weight;
+		}
+		public void setWeight(double weight) {
+			this.weight = weight;
 		}
 		
 	}

@@ -32,17 +32,16 @@ public class Seller extends Person{
 	private PriceChange price_change;
 	
 	public Seller(int p, int m, int c){
-		this();
 		personality = Personality.values()[p];
 		money_status = MoneyStatus.values()[m];
 		price_change = PriceChange.values()[c];
 	}
 	
 	public Seller(){
-		this.setProperty(new Property());
 	}
 	
 	public void setup() {
+		this.setProperty(new Property());
 		Object[] args = getArguments();
 		if(args == null) {
 			personality = Personality.NORMAL;
@@ -70,9 +69,9 @@ public class Seller extends Person{
 		String str = "";
 		str += this.getLocalName()+ ": ";
 		if(this.getProperty() != null)
-			str += "I was unable to sell the house ;(";
+			str += "I was unable to sell this house " + this.getProperty();
 		else
-			str += "I sold the house for " + this.getMoney();
+			str += "I sold this house " + this.getProperty() + " for " + this.getMoney();
 		System.out.println(str);
 	}	
 	
