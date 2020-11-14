@@ -1,4 +1,4 @@
-import jade.proto.ProposeInitiator;
+import jade.proto.ContractNetInitiator;
 
 import java.util.Vector;
 
@@ -13,9 +13,10 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 
 
-public class AgentAsksAgency extends ProposeInitiator {
+public class AgentAsksAgency extends ContractNetInitiator {
 	
 	private RealEstateAgent agent;
+	private boolean accepted = false;
 	
 	
 	public AgentAsksAgency(RealEstateAgent agent ,ACLMessage cfp) {
@@ -24,7 +25,7 @@ public class AgentAsksAgency extends ProposeInitiator {
 	}
 	
 	
-	protected Vector<ACLMessage> prepareInitiations(ACLMessage cfp) {
+	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
 		cfp.setContent("Quero entrar na agencia! A minha taxa é:" + agent.getAgentRate());
 		System.out.println("AGENTE: Quero entrar na agencia! A minha taxa é:" + agent.getAgentRate());
@@ -37,22 +38,33 @@ public class AgentAsksAgency extends ProposeInitiator {
 		return v;		
 	}
 	
-	public void handleAllResponses(Vector responses) {
-		
-		int accepted = 0;
-		
-		for (int i = 0; i < responses.size(); i++) {
-			ACLMessage response = (ACLMessage) responses.get(i);
-			if (response.getPerformative() == ACLMessage.PROPOSE && accepted < 1) {
+	protected void handlePropose(ACLMessage response, Vector acceptances) {
 				
-				return;
-			}
-			else {
-				
-			}
+		if (!accepted) {
+			ACLMessage accept = response.createReply();
+			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
+			acceptances.add(accept);
+			this.accepted = true;
+			
+			return;
+		}
+		else {
+			ACLMessage refuse = response.createReply();
+			refuse.setPerformative(ACLMessage.REJECT_PROPOSAL);
+			acceptances.add(refuse);
 		}
 		
 		return;
 		
+	}
+	
+	protected void handleInform(ACLMessage inform) {
+		this.agent.setAgency(inform.getSender());
+		System.out.println("AGENTE: Tenho nova agencia!");
+	}
+	
+	protected void handleFailure(ACLMessage failure) {
+		this.agent.setAgency(null);
+		this.reset(new ACLMessage (ACLMessage.CFP));
 	}
 }

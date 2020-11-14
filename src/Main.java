@@ -11,14 +11,11 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-<<<<<<< HEAD
-	private static int n_sellers = 5;
-	private static int n_buyers = 1;
+
 	private static int n_reagencies = 3;
 	private static int n_reagents = 1;
-=======
-	private static int n_sellers = 30; //between 1 and 40
-	private static int n_buyers = 3;  //between 1 and 40
+	private static int n_sellers = 0; //between 1 and 40
+	private static int n_buyers = 0;  //between 1 and 40
 	
 	//seller
 	private static double ratio_patient = 0.2; //between 0 and 1
@@ -33,10 +30,6 @@ public class Main {
 	private static double ratio_hurry = 0.2; //between 0 and 1
 	private static double ratio_normal_calm = 0.5; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 1 and 40
-	
-	private static int n_reagencies = 0;
-	private static int n_reagents = 0;
->>>>>>> 3f2f05631449cbd898ea9cb46c0af4b55eccb5c9
 	
 	static Random rnd;
 	static {
@@ -66,7 +59,7 @@ public class Main {
 			e.printStackTrace();
 		}
 		createBuyers(cc);
-<<<<<<< HEAD
+		
 		try {
 			Thread.sleep(100);
 		} catch (InterruptedException e) {
@@ -78,8 +71,9 @@ public class Main {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
 		createAgents(cc);
-=======
+	
 		
 		try {
 			Thread.sleep(5000);
@@ -89,7 +83,7 @@ public class Main {
 		System.out.println("\n\n");
 		cc.kill();
 		rt.shutDown();
->>>>>>> 3f2f05631449cbd898ea9cb46c0af4b55eccb5c9
+		
 	}
 	
 	private static void createSellers(ContainerController cc) {
