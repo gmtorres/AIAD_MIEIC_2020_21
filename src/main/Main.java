@@ -22,8 +22,8 @@ public class Main {
 	private static int n_reagents = 12; //greater than 0
 	
 	//seller personality
-	private static double ratio_patient = 0.4; //between 0 and 1
-	private static double ratio_normal_patient = 0.2; //between 0 and 1
+	private static double ratio_patient = 1; //between 0 and 1
+	private static double ratio_normal_patient = 0; //between 0 and 1
 	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 0 and 1
 	
 	private static double ratio_desperate = 1; //between 0 and 1
@@ -33,7 +33,7 @@ public class Main {
 	private static double ratio_normal_change = 1 - ratio_flexible; //between 0 and 1
 	
 	//buyer personality
-	private static double ratio_hurry = 0; //between 0 and 1
+	private static double ratio_hurry = 1; //between 0 and 1
 	private static double ratio_normal_calm = 0; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 0 and 1
 	

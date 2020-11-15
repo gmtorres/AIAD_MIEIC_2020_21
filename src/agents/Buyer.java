@@ -147,9 +147,9 @@ public class Buyer extends Person{
 	public double getBestFactor() {
 		switch(looking_state) {
 		case HURRY:
-			return 0.95;
+			return 0.85;
 		case CALM:
-			return 1.1;
+			return 1.0;
 		case BEST:
 			return 1.2;
 		}

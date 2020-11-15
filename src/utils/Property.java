@@ -47,11 +47,11 @@ public class Property implements java.io.Serializable{
 		attributes.add(new Attribute("area_garden",300, random ? rnd.nextInt(150) + 0 : 0 ,0.2));
 		attributes.add(new Attribute("num_bedrooms",1500,random ? rnd.nextInt(5) + 1 : 0 ,0.7));
 		attributes.add(new Attribute("num_wc",1000, random ? rnd.nextInt(4) + 1 : 0 ,0.5));
-		//attributes.add(new Attribute("attic",2000, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
-		//attributes.add(new Attribute("basement",1700, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
+		attributes.add(new Attribute("attic",2000, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
+		attributes.add(new Attribute("basement",1700, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
 		attributes.add(new Attribute("parking_spots",1050, random ? rnd.nextInt(3) + 0 : 0 ,0.5));
 		attributes.add(new Attribute("heating",6000, random ? rnd.nextInt(2) + 0 : 0 ,1));
-		//attributes.add(new Attribute("energy_efficiency",6000, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
+		attributes.add(new Attribute("energy_efficiency",6000, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
 	}
 	
 	private void setAttribute(String d, int value) {

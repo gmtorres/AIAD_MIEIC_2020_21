@@ -62,7 +62,7 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 					continue;
 				Property proposed = new Property(r_content);
 				double factor = Property.relativePropertyDifference(desired, proposed);
-				if(factor >= 0.70 && factor <= 2.2) { //não vou sugerir nem casas fracas nem casas muito bai
+				if(factor >= 0.7 && factor <= 1.6) { //não vou sugerir nem casas fracas nem casas muito bai
 					AID sender = response.getSender();
 					content+= sender + ",";
 					accepted++;
