@@ -28,6 +28,7 @@ public class Buyer extends Person{
 	private Property property;
 	
 	private Behaviour getHouse = null;
+	private int initial_money;
 	
 	private ArrayList<AID> sellers = new ArrayList();
 	
@@ -36,6 +37,7 @@ public class Buyer extends Person{
 		this.property = null;
 		this.desired_property = new Property();
 		this.setMoney((int) (this.desired_property.evaluateHouse() * (0.9 + rnd.nextFloat() * 0.5)));
+		this.initial_money = this.getMoney();
 	}
 	
 	public Buyer(int l) {
@@ -80,6 +82,16 @@ public class Buyer extends Person{
 	}
 	public ArrayList<AID> getSellers(){
 		return this.sellers;
+	}
+	
+	public int getInitialMoney() {
+		return this.initial_money;
+	}
+	
+	public int getTotalValue() {
+		if(this.getProperty() == null)
+			return this.getMoney();
+		return this.getMoney() + this.getProperty().getPrice();
 	}
 	
 	public void addSeller(AID new_aid) {
@@ -134,7 +146,7 @@ public class Buyer extends Person{
 		return 1.2;
 	}
 	
-	public int getMinValid() {
+	public int getMinValid() { // minumum of houses available, if lower than this, forced to make a decision
 		switch(looking_state) {
 		case HURRY:
 			return 5;

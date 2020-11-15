@@ -7,7 +7,7 @@ public class Property implements java.io.Serializable{
 	
 	private static Random rnd = new Random();
 	
-	private int price;
+	private int price = 0;
 	
 	ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 	
@@ -37,6 +37,9 @@ public class Property implements java.io.Serializable{
 		for(int i = 0; i < entries.length; i++) {
 			this.parseEntry(entries[i]);
 		}
+	}
+	public void setPropertyPrice(int p) {
+		this.price = p;
 	}
 	
 	private void calculatePropertyPrice() {

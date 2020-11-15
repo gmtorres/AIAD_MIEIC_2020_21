@@ -14,31 +14,31 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 100; //between 1 and 40
-	private static int n_buyers = 20;  //between 1 and 40
+	private static int n_sellers = 200; //between 1 and 40
+	private static int n_buyers = 40;  //between 1 and 40
 
-	private static int n_reagencies = 1;
-	private static int n_reagents = 5;
+	private static int n_reagencies = 3;
+	private static int n_reagents = 15;
 	
 	//seller
-	private static double ratio_patient = 0.2; //between 0 and 1
-	private static double ratio_normal_patient = 0.5; //between 0 and 1
+	private static double ratio_patient = 0; //between 0 and 1
+	private static double ratio_normal_patient = 0; //between 0 and 1
 	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 1 and 40
-	private static double ratio_desperate = 0.2;
+	private static double ratio_desperate = 0;
 	private static double ratio_normal_money = 1 - ratio_desperate;
-	private static double ratio_flexible = 0.2;
+	private static double ratio_flexible = 0;
 	private static double ratio_normal_change = 1 - ratio_flexible;
 	
 	//buyer
-	private static double ratio_hurry = 0.2; //between 0 and 1
-	private static double ratio_normal_calm = 0.5; //between 0 and 1
+	private static double ratio_hurry = 0; //between 0 and 1
+	private static double ratio_normal_calm = 0; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 1 and 40
 
 	
-	private static ArrayList<Seller> sellers = new ArrayList();
-	private static ArrayList<Buyer> buyers = new ArrayList();
+	private static ArrayList<Seller> sellers = new ArrayList<Seller>();
+	private static ArrayList<Buyer> buyers = new ArrayList<Buyer>();
 	
-	private static ArrayList<RealEstateAgent> reagents = new ArrayList();
+	private static ArrayList<RealEstateAgent> reagents = new ArrayList<RealEstateAgent>();
 
 	static Random rnd;
 	static {
@@ -49,15 +49,12 @@ public class Main {
 		Runtime rt = Runtime.instance();
 		Profile profile = new ProfileImpl();
 		profile.setParameter("gui","true");
-		//profile.setParameter("ratio_patient", String.valueOf(ratio_patient));
-		//profile.setParameter();
 		ContainerController cc = rt.createMainContainer(profile);
 		AgentController agc;
 		try {
 			agc = cc.createNewAgent("Sniffer","jade.tools.sniffer.Sniffer",null);
 			agc.start();
 		} catch (StaleProxyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -81,6 +78,8 @@ public class Main {
 		createBuyers(cc);
 		
 		getInteractions();
+		
+		getStatistics();
 		
 		System.out.println("\n\n");
 		cc.kill();
@@ -182,6 +181,88 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private static void getStatistics() {
+		int buyers_with_house = 0;
+		for(Buyer b : buyers) {
+			if(b.getProperty() != null)
+				buyers_with_house++;
+		}
+		System.out.println("Buyers with property: " + 100*(double)buyers_with_house/(double)buyers.size() + "%");
+		
+		int buyers_with_profit = 0;
+		for(Buyer b : buyers) {
+			if(b.getInitialMoney() < b.getTotalValue())
+				buyers_with_profit++;
+		}
+		System.out.println("Buyers with profit from those who bought: " + 100*(double)buyers_with_profit/(double)buyers_with_house + "%");
+		
+		int sellers_sold = 0;
+		for(Seller s : sellers) {
+			if(s.getOldProperty() != null)
+				sellers_sold++;
+		}
+		System.out.println("Sellers that sold the property: " + 100*(double)sellers_sold/(double)sellers.size() + "%");
+		
+		int sellers_with_profit = 0;
+		for(Seller s : sellers) {
+			if(s.getOldProperty() != null && s.getOldProperty().getPrice() < s.getMoney())
+				sellers_with_profit++;
+		}
+		System.out.println("Sellers with profit from those who sold their property: " + 100*(double)sellers_with_profit/(double)sellers_sold + "%");
+		System.out.println("\n");
+		int buyers_money_before = 0;
+		int buyers_money_now = 0;
+		int buyers_bought_money_before = 0;
+		int buyers_bought_money_now = 0;
+		
+		for(Buyer b : buyers) {
+			buyers_money_before += b.getInitialMoney();
+			buyers_money_now += b.getTotalValue();
+			if(b.getProperty() != null) {//comprou casa
+				buyers_bought_money_before += b.getInitialMoney();
+				buyers_bought_money_now += b.getTotalValue();
+			}
+		}
+		
+		
+		System.out.println("Money in buyers before: " + buyers_money_before + "€");
+		System.out.println("Money in buyers now: " + buyers_money_now + "€");
+		double b_relation = 100*(double)(buyers_money_now - buyers_money_before) / (double)buyers_money_before;
+		System.out.println("Money difference in buyers: " + (buyers_money_now - buyers_money_before) + "€ which is " + b_relation + "%");
+		
+		System.out.println("Money in buyers that bought before: " + buyers_bought_money_before + "€");
+		System.out.println("Money in buyers that bought now: " + buyers_bought_money_now + "€");
+		double b_relation_bought = 100*(double)(buyers_bought_money_now - buyers_bought_money_before) / (double)buyers_bought_money_before;
+		System.out.println("Money difference in buyers that bought: " + (buyers_bought_money_now - buyers_bought_money_before) + "€ which is " + b_relation_bought + "%");
+		
+		System.out.println("\n");
+		
+		
+		int sellers_money_before = 0;
+		int sellers_money_now = 0;
+		int sellers_sold_money_before = 0;
+		int sellers_sold_money_now = 0;
+		
+		for(Seller s : sellers) {
+			sellers_money_before += (s.getOldProperty() == null) ? s.getProperty().getPrice() : s.getOldProperty().getPrice();
+			sellers_money_now += (s.getOldProperty() == null) ? s.getProperty().getPrice() : s.getMoney();
+			if(s.getOldProperty() != null) { // vendeu uma casa
+				sellers_sold_money_before += s.getOldProperty().getPrice();
+				sellers_sold_money_now += s.getMoney();
+			}
+		}
+		System.out.println("Money in sellers before: " + sellers_money_before + "€");
+		System.out.println("Money in sellers now: " + sellers_money_now + "€");
+		double s_relation = 100*(double)(sellers_money_now - sellers_money_before) / (double)sellers_money_before;
+		System.out.println("Money difference in sellers: " + (sellers_money_now - sellers_money_before) + "€ which is " + s_relation + "%");
+		
+		System.out.println("Money in sellers that sold before: " + sellers_sold_money_before + "€");
+		System.out.println("Money in sellers that sold now: " + sellers_sold_money_now + "€");
+		double s_relation_sold = 100*(double)(sellers_sold_money_now - sellers_sold_money_before) / (double)sellers_sold_money_before;
+		System.out.println("Money difference in sellers that sold: " + (sellers_sold_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold + "%");
+		
 	}
 	
 	private static int getInterval(double values[]) {

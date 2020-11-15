@@ -157,7 +157,9 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	protected void handleInform(ACLMessage inform) {
 		//System.out.println("Inform recebido");
 		this.buyer.setProperty(selected_property);
-		Integer price_payed = Integer.parseInt(inform.getContent());
+		String [] parts = inform.getContent().split(",");
+		Integer price_payed = Integer.parseInt(parts[0]);
+		this.buyer.getProperty().setPropertyPrice(Integer.parseInt(parts[1]));
 		this.buyer.increaseMoney(-price_payed);
 		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€ por esta casa:\n\t\t " +
 							this.buyer.getProperty() + ",\nprocurava esta:\n\t\t " + this.buyer.getDesiredProperty()+

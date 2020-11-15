@@ -96,7 +96,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			Integer price_payed = Integer.parseInt(propose.getContent().split("/")[0]);
 			
 			reply.setPerformative(ACLMessage.INFORM);
-			reply.setContent(String.valueOf(price_payed));
+			reply.setContent(String.valueOf(price_payed) + "," + this.seller.getProperty().getPrice());
 			Property temp_prop = this.seller.getProperty();
 			this.seller.sellHouse();
 			this.seller.increaseMoney(price_payed);

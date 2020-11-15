@@ -111,6 +111,10 @@ public class Seller extends Person{
 		this.bestOffer = bestOffer;
 	}
 	
+	public Property getOldProperty() {
+		return this.old_property;
+	}
+	
 	public void sellHouse(){
 		this.old_property = this.getProperty();
 		this.setProperty(null);
