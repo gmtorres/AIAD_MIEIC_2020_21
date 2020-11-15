@@ -22,8 +22,8 @@ public class Main {
 	private static int n_reagents = 12; //greater than 0
 	
 	//seller personality
-	private static double ratio_patient = 1; //between 0 and 1
-	private static double ratio_normal_patient = 0; //between 0 and 1
+	private static double ratio_patient = 0.4; //between 0 and 1
+	private static double ratio_normal_patient = 0.2; //between 0 and 1
 	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 0 and 1
 	
 	private static double ratio_desperate = 1; //between 0 and 1
@@ -338,10 +338,12 @@ public class Main {
 	
 	private static int getInterval(double values[]) {
 		double r = rnd.nextDouble();
-		int i = 1;
-		for(i=0; i < values.length-1;i++) {
-			if(r >= values[i] && r <= values[i+1])
+		int i = 0;
+		double x = 0;
+		for(; i < values.length-1;i++) {
+			if(r >= x && r <= x+values[i])
 				return i;
+			x+=values[i];
 		}
 		return i;
 	}
