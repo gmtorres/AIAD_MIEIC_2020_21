@@ -42,6 +42,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	protected ACLMessage handleCfp(ACLMessage cfp) {
 		//System.out.println("Recebi pedido de compra!");
 		//System.out.println(cfp);
+		this.seller.logFrom(cfp.getContent(),cfp.getSender());
 		ACLMessage reply = cfp.createReply();
 		
 		if(seller.getProperty() == null) {

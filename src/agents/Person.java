@@ -2,7 +2,7 @@ package agents;
 import jade.core.Agent;
 import utils.Property;
 
-public class Person extends Agent {
+public class Person extends Logger {
 	
 	private int money;
 	private Property property;

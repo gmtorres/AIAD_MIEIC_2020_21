@@ -58,7 +58,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			ACLMessage response = (ACLMessage) responses.get(i);
 			if(response.getPerformative() != ACLMessage.PROPOSE)
 				continue;
-			
+			this.buyer.log("O " + response.getSender().getLocalName() + " sugeriu o seguinte preço: " + response.getContent());
 			String [] parts = response.getContent().split("/");
 			Integer proposed_price = Integer.parseInt(parts[0]);
 			Property proposed_property = new Property(parts[1]);
@@ -73,6 +73,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 				//System.out.println("Preço muito alto ou casa muito diferente, não vou negociar " + relativeDifference + "  " + relativePropertyValue);
 				ACLMessage reply = response.createReply();
 				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
+				this.buyer.log("A proposta do" + response.getSender().getLocalName() + " nao me agrada");
 				replies.add(reply);
 				continue; 
 			}else { // negociar ou se diferença < 0 posso aceitar ou negociar
@@ -171,6 +172,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		/*System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€ por esta casa:\n\t\t " +
 							this.buyer.getProperty() + ",\nprocurava esta:\n\t\t " + this.buyer.getDesiredProperty()+
 							"\ncom um preço estimado de:\n\t\t" + this.buyer.getDesiredProperty().evaluateHouse() );*/
+		this.buyer.log("Comprei uma casa ao " + inform.getSender().getLocalName());
 	}
 	
 	private double generateRandomDistribution(int times) {

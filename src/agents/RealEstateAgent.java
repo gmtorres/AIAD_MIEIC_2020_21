@@ -16,7 +16,7 @@ import agents.Seller.PriceChange;
 import behaviours.AgentAsksAgency;
 import behaviours.RealEstateAgentGetsRequest;
 
-public class RealEstateAgent extends Agent{
+public class RealEstateAgent extends Logger{
     private AID agency = null;
     private int agentRate;
     private Behaviour b = null;

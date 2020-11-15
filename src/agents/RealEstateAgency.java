@@ -15,7 +15,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 
-public class RealEstateAgency extends Agent{
+public class RealEstateAgency extends Logger{
     private ArrayList<AID> agents;
     private int minAgentRate;
     private int maxAgentRate;

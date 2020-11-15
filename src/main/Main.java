@@ -14,30 +14,35 @@ import jade.core.ProfileImpl;
 
 public class Main {
 	
-	private static int n_sellers = 200; //between 1 and 40
-	private static int n_buyers = 50;  //between 1 and 40
+	// number of agents
+	private static int n_sellers = 10; //greater than 0
+	private static int n_buyers = 2;  //greater than 0
 
-	private static int n_reagencies = 2;
-	private static int n_reagents = 10;
+	private static int n_reagencies = 2; //greater than 0
+	private static int n_reagents = 3; //greater than 0
 	
-	//seller
+	
+	//seller personality
 	private static double ratio_patient = 1; //between 0 and 1
 	private static double ratio_normal_patient = 0; //between 0 and 1
 	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 0 and 1
-	private static double ratio_desperate = 1;
-	private static double ratio_normal_money = 1 - ratio_desperate;
-	private static double ratio_flexible = 1;
-	private static double ratio_normal_change = 1 - ratio_flexible;
 	
-	//buyer
+	private static double ratio_desperate = 1; //between 0 and 1
+	private static double ratio_normal_money = 1 - ratio_desperate; //between 0 and 1
+	
+	private static double ratio_flexible = 1; //between 0 and 1
+	private static double ratio_normal_change = 1 - ratio_flexible; //between 0 and 1
+	
+	
+	//buyer personality
 	private static double ratio_hurry = 1; //between 0 and 1
 	private static double ratio_normal_calm = 0; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 0 and 1
 	
-	//RealEstateAgent
+	//RealEstateAgent personality
 	private static double ratio_bad_perf = 1; //between 0 and 1
 	private static double ratio_normal_perf = 0; //between 0 and 1
-	private static double ratio_good_perf = 1 - ratio_bad_perf - ratio_normal_perf; //between 1 and 40
+	private static double ratio_good_perf = 1 - ratio_bad_perf - ratio_normal_perf; //between 0 and 1
 	
 	private static ArrayList<Seller> sellers = new ArrayList<Seller>();
 	private static ArrayList<Buyer> buyers = new ArrayList<Buyer>();
