@@ -15,22 +15,22 @@ import jade.core.ProfileImpl;
 public class Main {
 	
 	private static int n_sellers = 200; //between 1 and 40
-	private static int n_buyers = 40;  //between 1 and 40
+	private static int n_buyers = 50;  //between 1 and 40
 
-	private static int n_reagencies = 3;
-	private static int n_reagents = 15;
+	private static int n_reagencies = 2;
+	private static int n_reagents = 10;
 	
 	//seller
-	private static double ratio_patient = 0; //between 0 and 1
+	private static double ratio_patient = 1; //between 0 and 1
 	private static double ratio_normal_patient = 0; //between 0 and 1
 	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 1 and 40
-	private static double ratio_desperate = 0;
+	private static double ratio_desperate = 1;
 	private static double ratio_normal_money = 1 - ratio_desperate;
-	private static double ratio_flexible = 0;
+	private static double ratio_flexible = 1;
 	private static double ratio_normal_change = 1 - ratio_flexible;
 	
 	//buyer
-	private static double ratio_hurry = 0; //between 0 and 1
+	private static double ratio_hurry = 1; //between 0 and 1
 	private static double ratio_normal_calm = 0; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 1 and 40
 
@@ -45,46 +45,41 @@ public class Main {
 		rnd = new Random();
 	}
 	
-	public static void main(String[] str) throws StaleProxyException {
+	public static void main(String[] str) throws StaleProxyException, InterruptedException {
 		Runtime rt = Runtime.instance();
 		Profile profile = new ProfileImpl();
 		profile.setParameter("gui","true");
+		
+		run(rt,profile);
+		
+		rt.shutDown();
+		
+	}
+	
+	private static void run(Runtime rt, Profile profile) throws StaleProxyException, InterruptedException {
+		sellers = new ArrayList<Seller>();
+		buyers = new ArrayList<Buyer>();
+		reagents = new ArrayList<RealEstateAgent>();
+		
 		ContainerController cc = rt.createMainContainer(profile);
-		AgentController agc;
-		try {
-			agc = cc.createNewAgent("Sniffer","jade.tools.sniffer.Sniffer",null);
-			agc.start();
-		} catch (StaleProxyException e) {
-			e.printStackTrace();
-		}
 		
 		createSellers(cc);
-		
 		createAgencies(cc);
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		
+		Thread.sleep(100);
+		
 		createAgents(cc);
 		
 		waitForAgents();
 		
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+		Thread.sleep(100);
+		
 		createBuyers(cc);
 		
-		getInteractions();
-		
+		waitInteractions();
 		getStatistics();
 		
-		System.out.println("\n\n");
 		cc.kill();
-		rt.shutDown();
-		
 	}
 	
 	private static void waitForAgents() {
@@ -99,11 +94,11 @@ public class Main {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(reas_done);
+			//System.out.println(reas_done);
 		}
 	}
 	
-	private static void getInteractions() {
+	private static void waitInteractions() {
 		int buyers_done = 0;
 		while(buyers_done < buyers.size()) {
 			buyers_done = 0;
@@ -115,7 +110,7 @@ public class Main {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println(buyers_done);
+			//System.out.println(buyers_done);
 		}
 	}
 	
@@ -184,12 +179,15 @@ public class Main {
 	}
 	
 	private static void getStatistics() {
+		System.out.println("Buyers: " + buyers.size());
+		System.out.println("Sellers: " + sellers.size());
+		
 		int buyers_with_house = 0;
 		for(Buyer b : buyers) {
 			if(b.getProperty() != null)
 				buyers_with_house++;
 		}
-		System.out.println("Buyers with property: " + 100*(double)buyers_with_house/(double)buyers.size() + "%");
+		System.out.println("Buyers with property: " + 100*(double)buyers_with_house/(double)buyers.size() + "% which is " + buyers_with_house + " buyers");
 		
 		int buyers_with_profit = 0;
 		for(Buyer b : buyers) {
@@ -203,7 +201,7 @@ public class Main {
 			if(s.getOldProperty() != null)
 				sellers_sold++;
 		}
-		System.out.println("Sellers that sold the property: " + 100*(double)sellers_sold/(double)sellers.size() + "%");
+		System.out.println("Sellers that sold the property: " + 100*(double)sellers_sold/(double)sellers.size() + "% which is " + sellers_sold + " sellers");
 		
 		int sellers_with_profit = 0;
 		for(Seller s : sellers) {
@@ -262,6 +260,22 @@ public class Main {
 		System.out.println("Money in sellers that sold now: " + sellers_sold_money_now + "€");
 		double s_relation_sold = 100*(double)(sellers_sold_money_now - sellers_sold_money_before) / (double)sellers_sold_money_before;
 		System.out.println("Money difference in sellers that sold: " + (sellers_sold_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold + "%");
+		
+		System.out.println("\n");
+		
+		int rea_money_now = 0;
+		for(RealEstateAgent r : reagents) {
+			rea_money_now += r.getMoney();
+		}
+		double rea_mean = (double)rea_money_now/reagents.size();
+		double rea_sd = 0;
+		for(RealEstateAgent r : reagents) {
+			rea_sd += Math.pow(r.getMoney()-rea_mean,2);
+		}
+		rea_sd = Math.sqrt(rea_sd/reagents.size());
+		
+		System.out.println("Money in agents: " + rea_money_now + "€ with a mean of " + rea_mean +"€ per agent and a standard deviation of " + rea_sd);
+		
 		
 	}
 	

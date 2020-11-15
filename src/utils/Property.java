@@ -11,25 +11,19 @@ public class Property implements java.io.Serializable{
 	
 	ArrayList<Attribute> attributes = new ArrayList<Attribute>();
 	
-	private Integer area_built;
-	private Integer area_garden;
-	private Integer num_bedrooms;
-	private Integer num_wc;
-	//private boolean heating;
-	
 	public Property(){ // generate a house with random attributes
 		initializeAttributes(true);
 		calculatePropertyPrice();
 	}
 	
-	public Property(int area_built, int area_garden, int num_bed, int num_wc){ // generate a house with attributes passed by parameters
+	/*public Property(int area_built, int area_garden, int num_bed, int num_wc){ // generate a house with attributes passed by parameters
 		initializeAttributes(false);
 		this.setAttribute("area_built",area_built);
 		this.setAttribute("area_garden",area_garden);
 		this.setAttribute("num_bedrooms",num_bed);
 		this.setAttribute("num_wc",num_wc);
 		calculatePropertyPrice();
-	}
+	}*/
 	
 	public Property(String description){ // generate a generic house from a string, does not set the house price
 		initializeAttributes(false);
@@ -49,10 +43,15 @@ public class Property implements java.io.Serializable{
 	}
 	
 	private void initializeAttributes(boolean random) {
-		attributes.add(new Attribute("area_built",1500, random ? rnd.nextInt(350) + 50 : 0 ,0.5));
-		attributes.add(new Attribute("area_garden",800, random ? rnd.nextInt(150) + 5 : 0 ,0.5));
-		attributes.add(new Attribute("num_bedrooms",400,random ? rnd.nextInt(2) + 1 : 0 ,1));
-		attributes.add(new Attribute("num_wc",2500, random ? rnd.nextInt(2) + 1 : 0 ,1));
+		attributes.add(new Attribute("area_built",600, random ? rnd.nextInt(350) + 50 : 0 ,0.2));
+		attributes.add(new Attribute("area_garden",300, random ? rnd.nextInt(150) + 0 : 0 ,0.2));
+		attributes.add(new Attribute("num_bedrooms",1500,random ? rnd.nextInt(5) + 1 : 0 ,0.7));
+		attributes.add(new Attribute("num_wc",1000, random ? rnd.nextInt(4) + 1 : 0 ,0.5));
+		//attributes.add(new Attribute("attic",2000, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
+		//attributes.add(new Attribute("basement",1700, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
+		attributes.add(new Attribute("parking_spots",1050, random ? rnd.nextInt(3) + 0 : 0 ,0.5));
+		attributes.add(new Attribute("heating",6000, random ? rnd.nextInt(2) + 0 : 0 ,1));
+		//attributes.add(new Attribute("energy_efficiency",6000, random ? rnd.nextInt(2) + 0 : 0 ,0.25));
 	}
 	
 	private void setAttribute(String d, int value) {
@@ -80,14 +79,17 @@ public class Property implements java.io.Serializable{
 			double w = p1.attributes.get(i).getWeight();
 			double att1 = (double)p1.attributes.get(i).getValue() * w;
 			double att2 = (double)p2.attributes.get(i).getValue() * w;
-			//double relation = Math.log(att2+1)/ Math.log(att1+1);
+			if(att1 == 0 || att2 == 0) {
+				att1++;
+				att2++;
+			}
 			double relation = Math.sqrt(att2)/ Math.sqrt(att1);
 			if(relation > 1) // melhor
 				r *= Math.sqrt(relation);
 			else //pior
 				r *= relation;
 		}
-		System.out.println("      "+p1+"  "+p2+"  "+r);
+		//System.out.println("      "+p1+"  "+p2+"  "+r);
 		return r;
 	}
 	

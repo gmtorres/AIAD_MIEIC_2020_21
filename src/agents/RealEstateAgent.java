@@ -2,6 +2,7 @@ package agents;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -19,6 +20,8 @@ public class RealEstateAgent extends Agent{
     private int agentRate;
     private Behaviour b = null;
     
+    private int money = 0;
+    
     public RealEstateAgent(){
     	super();
     	Random rnd = new Random();
@@ -29,6 +32,19 @@ public class RealEstateAgent extends Agent{
     	b = new AgentAsksAgency(this, new ACLMessage(ACLMessage.CFP));
 		addBehaviour(b);
 		addBehaviour(new RealEstateAgentGetsRequest(this,MessageTemplate.MatchPerformative(ACLMessage.REQUEST)));
+		addBehaviour(new CyclicBehaviour(this) 
+        {
+			MessageTemplate mt= MessageTemplate.MatchPerformative(ACLMessage.INFORM_IF);
+            public void action() 
+            {
+				ACLMessage msg= receive(mt);
+                if (msg!=null) {
+                	String content = msg.getContent();
+                	money += Integer.parseInt(content);
+                }
+                block();
+             }
+        });
 	}
 	public boolean done() {
 		if(b == null)
@@ -39,6 +55,10 @@ public class RealEstateAgent extends Agent{
     
     public void setAgency(AID agency) {
         this.agency = agency;
+    }
+    
+    public int getMoney() {
+    	return this.money;
     }
     
 

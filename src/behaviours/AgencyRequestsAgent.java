@@ -22,12 +22,12 @@ public class AgencyRequestsAgent extends AchieveREInitiator {
 	}
 	
 	protected Vector prepareRequests(ACLMessage request) {
-		System.out.println("\n\nA enviar mensagens");
+		//System.out.println("\n\nA enviar mensagens");
 		Vector requests = new Vector<ACLMessage>();
 		ACLMessage r = (ACLMessage) request.clone();
 		AID agentID = this.agency.getRandomAgent();
 		if(agentID != null) { // agente disponivel
-			System.out.println(agentID.getName());
+			//System.out.println(agentID.getName());
 			r.addReceiver(agentID);
 			r.setContent(this.clientRequest.getContent());
 			requests.add(r);

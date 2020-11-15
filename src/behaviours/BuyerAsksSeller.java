@@ -29,13 +29,20 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 	
 
 	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
-		Vector<ACLMessage> v = new Vector<ACLMessage >();
-		cfp.setContent("Quero comprar!");
+		Vector<ACLMessage> v = new Vector<ACLMessage>();
+		//cfp.setContent("Quero comprar!");
 		ArrayList<AID> sellers = this.buyer.getSellers();
-		for (AID s : sellers) {
-			cfp.addReceiver(s);
+		for (int i = 0; i < sellers.size();i++) {
+			AID s = sellers.get(i);
+			ACLMessage msg = (ACLMessage) cfp.clone();
+			msg.addReceiver(s);
+			msg.setContent(this.buyer.reAgents.get(i) + "," + this.buyer.rates.get(i));
+			msg.addUserDefinedParameter(ACLMessage.SF_TIMEOUT, "2000");
+			//cfp.addReceiver(s);
+			v.add(msg);
 		}
-		v.add(cfp);
+		//cfp.addUserDefinedParameter(ACLMessage.SF_TIMEOUT, "2000");
+		//v.add(cfp);
 		return v;		
 	}
 	
@@ -56,14 +63,14 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			Integer proposed_price = Integer.parseInt(parts[0]);
 			Property proposed_property = new Property(parts[1]);
 			Integer standard_price = proposed_property.evaluateHouse();
-			System.out.println("Seller sugeriu " + proposed_price);
+			//System.out.println("Seller sugeriu " + proposed_price);
 			
 			// diferença relativa entre o preço proposto e o que o buyer tem, se for muito maior, não vale a pena negociar
 			double relativeDifference = (double)(proposed_price - this.buyer.getMoney() ) / (double)this.buyer.getMoney();
 			double relativePropertyValue = Property.relativePropertyDifference(this.buyer.getDesiredProperty(), proposed_property);
 			
-			if(relativeDifference > 0.2 || relativePropertyValue < 0.7) { // diferença muito alta ou casa muito diferente, não interessado, não vale a pena negociar
-				//System.out.println("Preço muito alto, não vou negociar");
+			if(relativeDifference > 0.4 || relativePropertyValue < 0.7) { // diferença muito alta ou casa muito diferente, não interessado, não vale a pena negociar
+				//System.out.println("Preço muito alto ou casa muito diferente, não vou negociar " + relativeDifference + "  " + relativePropertyValue);
 				ACLMessage reply = response.createReply();
 				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
 				replies.add(reply);
@@ -90,7 +97,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					replies.add(reply);
 					
 				}else { // tenho dinheiro, posso aceitar ou negociar
-					System.out.println("Tenho dinheiro, vou avaliar a situação");
+					//System.out.println("Tenho dinheiro, vou avaliar a situação");
 					valid_proposals++;
 					Integer new_proposal;
 					if(relativePropertyPrice < 1) { // preço proposto é maior que o preço da propriedade
@@ -133,7 +140,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					}
 				}
 				
-				System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
+				//System.out.println("Aceitei o preço do " + ((ACLMessage)responses.get(position)).getSender());
 			}else { // tenho dinheiro, mas nenhuma oferta é sufecientemente boa
 				if(replies.isEmpty() == false) {
 					//System.out.println("A mandar nova iteração");
@@ -143,14 +150,14 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			
 		}else { // não tenho dinheiro para nada, a negociar tudo
 			if(replies.isEmpty() == false) {
-				System.out.println("A mandar nova iteração");
+				//System.out.println("A mandar nova iteração");
 				this.newIteration(replies);
 			}	
 		}
 	}
 	
 	protected void handleFailure(ACLMessage inform) {
-		//System.out.println("Failure recebido");
+		System.out.println("Failure recebido");
 		this.reset(new ACLMessage(ACLMessage.CFP));
 	}
 	
@@ -161,9 +168,9 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		Integer price_payed = Integer.parseInt(parts[0]);
 		this.buyer.getProperty().setPropertyPrice(Integer.parseInt(parts[1]));
 		this.buyer.increaseMoney(-price_payed);
-		System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€ por esta casa:\n\t\t " +
+		/*System.out.println("Eu, " + this.buyer.getLocalName() + ", fiquei com " + this.buyer.getMoney() + "€, paguei " + price_payed + "€ por esta casa:\n\t\t " +
 							this.buyer.getProperty() + ",\nprocurava esta:\n\t\t " + this.buyer.getDesiredProperty()+
-							"\ncom um preço estimado de:\n\t\t" + this.buyer.getDesiredProperty().evaluateHouse() );
+							"\ncom um preço estimado de:\n\t\t" + this.buyer.getDesiredProperty().evaluateHouse() );*/
 	}
 	
 	private double generateRandomDistribution(int times) {

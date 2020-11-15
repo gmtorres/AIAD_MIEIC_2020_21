@@ -52,18 +52,18 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 					continue;
 				Property proposed = new Property(r_content);
 				double factor = Property.relativePropertyDifference(desired, proposed);
-				if(factor >= 0.75) {
+				if(factor >= 0.70 && factor <= 2.2) { //não vou sugerir nem casas fracas nem casas muito bai
 					AID sender = response.getSender();
 					content+= sender + ",";
 					accepted++;
 				}
 			}
 		}
-		System.out.println(accepted);
+		//System.out.println(accepted);
 		
 		ACLMessage response = clientRequest.createReply();
 		response.setPerformative(ACLMessage.INFORM);
-		response.setContent(content);
+		response.setContent(content + "->" + this.REagent.getAID()+","+this.REagent.getAgentRate());
 		
 		if (parent != null) {
 			DataStore ds = getDataStore();

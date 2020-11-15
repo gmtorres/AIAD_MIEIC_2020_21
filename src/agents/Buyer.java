@@ -31,6 +31,8 @@ public class Buyer extends Person{
 	private int initial_money;
 	
 	private ArrayList<AID> sellers = new ArrayList();
+	public ArrayList<AID> reAgents = new ArrayList();
+	public ArrayList<Integer> rates = new ArrayList();
 	
 	public Buyer(){
 		Random rnd = new Random();
@@ -68,7 +70,7 @@ public class Buyer extends Person{
 		
 		this.addBehaviour(new BuyerContactsAgency(this,new ACLMessage(ACLMessage.REQUEST)));
 		
-		System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
+		//System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
 	}
 	
 	public void takeDown() {
@@ -78,7 +80,7 @@ public class Buyer extends Person{
 			str += " and bought the following house: " + this.getProperty() + " when looking for this: " + this.getDesiredProperty();
 		else
 			str += " and was unable to buy an house like this " + this.getDesiredProperty();
-		System.out.println(str);
+		//System.out.println(str);
 	}
 	public ArrayList<AID> getSellers(){
 		return this.sellers;
@@ -94,12 +96,14 @@ public class Buyer extends Person{
 		return this.getMoney() + this.getProperty().getPrice();
 	}
 	
-	public void addSeller(AID new_aid) {
+	public void addSeller(AID new_aid,AID REAgent,int rate) {
 		for(AID a : sellers) {
 			if(a.equals(new_aid))
 				return;
 		}
 		sellers.add(new_aid);
+		reAgents.add(REAgent);
+		rates.add(rate);
 	}
 	
 	public Property getDesiredProperty() {

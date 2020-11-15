@@ -1,6 +1,7 @@
 package agents;
 import behaviours.SellerGetsRequest;
 import behaviours.SellerRespondsBuyer_2;
+import jade.core.AID;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -59,11 +60,12 @@ public class Seller extends Person{
 			price_change = PriceChange.values()[Integer.parseInt(args[2].toString())];
 		}
 		
-		System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
-
+		//System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
+		
 		addBehaviour(new SellerGetsRequest(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)));
 		addBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		register();
+		
 	}
 	
 	public void takeDown() {
@@ -78,7 +80,7 @@ public class Seller extends Person{
 			str += "I was unable to sell this house " + this.getProperty();
 		else
 			str += "I sold this house " + this.old_property + " for " + this.getMoney() + "€";
-		System.out.println(str);
+		//System.out.println(str);
 	}	
 	
 	protected void register() {
@@ -115,9 +117,18 @@ public class Seller extends Person{
 		return this.old_property;
 	}
 	
-	public void sellHouse(){
+	public void sellHouse(AID reagent,int rate, int price){
+		int price_to_agent = rate*price/100;
+		
 		this.old_property = this.getProperty();
 		this.setProperty(null);
+		this.increaseMoney(price-price_to_agent);
+		
+		ACLMessage msg = new ACLMessage(ACLMessage.INFORM_IF);
+		AID dest = reagent;
+	    msg.addReceiver(dest);
+	    msg.setContent(String.valueOf(price_to_agent));
+	    send(msg);
 	}
 	
 	public int getMaxInteractions() {

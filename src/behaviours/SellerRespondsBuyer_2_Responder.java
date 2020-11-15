@@ -1,10 +1,14 @@
 package behaviours;
+import java.io.StringReader;
 import java.util.Random;
 
 import agents.Seller;
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.FIPAAgentManagement.FailureException;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.StringACLCodec;
+import jade.lang.acl.ACLCodec.CodecException;
 import jade.proto.SSContractNetResponder;
 import jade.proto.SSIteratedContractNetResponder;
 import utils.Property;
@@ -14,6 +18,9 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	Seller seller;
 	Integer interactions;
 	Integer min_value, max_value;
+	
+	AID reagent;
+	int rate ;
 	
 	static Random rnd;
 	static {
@@ -28,12 +35,12 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 		if(this.seller.getProperty() != null) {
 			this.min_value = this.seller.getPriceFromRelativeDifference(this.seller.getMinDifference()); // Minimum value
 			this.max_value = this.seller.getPriceFromRelativeDifference(this.seller.getMaxDifference()); // Max value
-			System.out.println("So aceito até " + this.min_value);
+			//System.out.println("So aceito até " + this.min_value);
 		}
 	}
 	
 	protected ACLMessage handleCfp(ACLMessage cfp) {
-		System.out.println("Recebi pedido de compra!");
+		//System.out.println("Recebi pedido de compra!");
 		//System.out.println(cfp);
 		ACLMessage reply = cfp.createReply();
 		
@@ -46,6 +53,14 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			offer = Integer.parseInt(cfp.getContent());
 		}catch(NumberFormatException e) {
 			offer = null;
+			String[] agent_info = cfp.getContent().split(",");
+			StringACLCodec codec = new StringACLCodec(new StringReader(agent_info[0]), null);
+			try {
+				reagent = codec.decodeAID();
+			} catch (CodecException e1) {
+				e1.printStackTrace();
+			}
+			rate = Integer.parseInt(agent_info[1]);
 		}
 		//se não houve nenhuma oferta, primeira iteração
 		interactions++;
@@ -56,10 +71,10 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 		}else { // analisar o valor proposto pelo comprador e sugerir outro ou aceitar
 			//System.out.println("Comprador sugeriu outro preço: " + offer);
 			if(interactions >= this.seller.getMaxInteractions()) {
-				//System.out.println("Cansei me desta negociação, vou desistir");
+				System.out.println("Cansei me desta negociação, vou desistir");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}else if(offer < this.min_value * 0.90) {
-				//System.out.println("Oferta muito baixa, deve estar a goxar comigo");
+				System.out.println("Oferta muito baixa, deve estar a goxar comigo");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}
 			else if(offer >= this.max_value) {
@@ -97,10 +112,11 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			
 			reply.setPerformative(ACLMessage.INFORM);
 			reply.setContent(String.valueOf(price_payed) + "," + this.seller.getProperty().getPrice());
-			Property temp_prop = this.seller.getProperty();
-			this.seller.sellHouse();
-			this.seller.increaseMoney(price_payed);
+			
+			this.seller.sellHouse(this.reagent,this.rate,price_payed);
+			//this.seller.increaseMoney(price_payed);
 		}else {
+			System.out.println("Erro aconteceu");
 			reply.setPerformative(ACLMessage.FAILURE);
 		}
 		return reply;

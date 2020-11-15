@@ -38,22 +38,37 @@ public class BuyerContactsAgency extends AchieveREInitiator {
 	}
 	
 	protected void handleInform(ACLMessage inform) {
-		System.out.println("BUYER:\n"+inform);
+		//System.out.println("BUYER:\n"+inform);
 		String content = inform.getContent();
 		if(content == null || (content != null && content.equals("")))
 			return;
-		String[] sellers = content.split(",");
+		String[] parts = content.split("->");
+		
+		String id = parts[1].split(",")[0];
+		int rate = Integer.parseInt(parts[1].split(",")[1]);
+		
+		String[] sellers = parts[0].split(",");
+		
+		StringACLCodec codec_temp = new StringACLCodec(new StringReader(id), null);
+		AID reagent = new AID();
+		try {
+			reagent = codec_temp.decodeAID();
+		} catch (CodecException e) {
+			e.printStackTrace();
+		}
+		
 		for(String s: sellers) {
 			//System.out.println(s);
+			if(s.isBlank() || s.isEmpty())
+				continue;
 			StringACLCodec codec = new StringACLCodec(new StringReader(s), null);
 			AID new_aid = new AID();
 			try {
 				new_aid = codec.decodeAID();
 			} catch (CodecException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			this.buyer.addSeller(new_aid);
+			this.buyer.addSeller(new_aid,reagent,rate);
 		}
 	}
 	
