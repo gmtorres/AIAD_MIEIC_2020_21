@@ -51,8 +51,8 @@ public class Seller extends Person{
 	public void setup() {
 		this.setProperty(new Property());
 		
-		//System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
-		
+		// System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + " euros");
+
 		addBehaviour(new SellerGetsRequest(this, MessageTemplate.MatchPerformative(ACLMessage.REQUEST)));
 		addBehaviour(new SellerRespondsBuyer_2(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		register();
@@ -70,7 +70,7 @@ public class Seller extends Person{
 		if(this.getProperty() != null)
 			str += "I was unable to sell this house " + this.getProperty();
 		else
-			str += "I sold this house " + this.old_property + " for " + this.getMoney() + "€";
+			str += "I sold this house " + this.old_property + " for " + this.getMoney() + "ï¿½";
 		//System.out.println(str);
 	}	
 	
