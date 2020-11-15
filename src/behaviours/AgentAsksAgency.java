@@ -29,8 +29,8 @@ public class AgentAsksAgency extends ContractNetInitiator {
 	
 	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
-		cfp.setContent("Quero entrar na agencia! A minha taxa é:" + agent.getAgentRate());
-		//System.out.println("AGENTE: Quero entrar na agencia! A minha taxa é:" + agent.getAgentRate());
+		cfp.setContent("Quero entrar na agencia! A minha taxa ï¿½:" + agent.getAgentRate());
+		// System.out.println("AGENTE: Quero entrar na agencia! A minha taxa: " + agent.getAgentRate() + " euros");
 		DFAgentDescription[] agencies = this.agent.searchForAgency();
 		for (int i = 0; i < agencies.length; i++) {
 			//String name = agencies[i].getName().getName();

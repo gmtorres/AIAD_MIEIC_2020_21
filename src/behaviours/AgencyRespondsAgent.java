@@ -23,7 +23,7 @@ public class AgencyRespondsAgent extends ContractNetResponder {
 		ACLMessage reply = cfp.createReply();
 		
 		if(num < agency.getAgentMinRate() || num > agency.getAgentMaxRate() && agency.canAcceptAgents()) {
-			//System.out.println("AGENCIA: Recusei" +  agency.getAgentMinRate() + "   " + agency.getAgentMaxRate());
+			// System.out.println("AGENCIA: Recusei a taxa entre " +  agency.getAgentMinRate() + " e " + agency.getAgentMaxRate());
 			reply.setPerformative(ACLMessage.REFUSE);
 			return reply;
 		}

@@ -26,7 +26,7 @@ public class Buyer extends Person{
 	
 	private Property desired_property;
 	private Property property;
-	
+
 	private Behaviour getHouse = null;
 	private int initial_money;
 	
@@ -70,12 +70,12 @@ public class Buyer extends Person{
 		
 		this.addBehaviour(new BuyerContactsAgency(this,new ACLMessage(ACLMessage.REQUEST)));
 		
-		//System.out.println(this.getLocalName() + ": I have " + this.getMoney() + "€");
+		// System.out.println(this.getLocalName() + ": I have " + this.getMoney() + " euros");
 	}
 	
 	public void takeDown() {
 		String str = "";
-		str += this.getLocalName() + ": I have " + this.getMoney() + "€";
+		str += this.getLocalName() + ": I have " + this.getMoney() + "ï¿½";
 		if(this.getProperty() != null)
 			str += " and bought the following house: " + this.getProperty() + " when looking for this: " + this.getDesiredProperty();
 		else
