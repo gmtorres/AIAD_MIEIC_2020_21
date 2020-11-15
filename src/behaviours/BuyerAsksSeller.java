@@ -126,10 +126,12 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			   (valid_proposals <  this.buyer.getMinValid() && bestFactor > this.buyer.getWorstFactor())) { // se houverem poucas ofertas, mais vale ficar com uma do que a arder
 				
 				//System.out.println("Vou aceitar a proposta do vendedor");
+				
 				acceptances.clear();
 				for(int i = 0; i < responses.size();i++) { // se eu aceitar um pedido, rejeitar todos os outros
 					ACLMessage response = ((ACLMessage)responses.get(i));
 					if(i == position) { // apenas um accept!
+						this.buyer.log("Vou aceitar a proposta do " + response.getSender().getLocalName());
 						this.selected_property = new Property(response.getContent().split("/")[1]);
 						ACLMessage accept = response.createReply();
 						accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);

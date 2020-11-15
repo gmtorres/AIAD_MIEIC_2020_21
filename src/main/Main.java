@@ -54,11 +54,11 @@ public class Main {
 		rnd = new Random();
 	}
 	
-	public static final boolean DEBUG = false;
+	public static boolean DEBUG = false;
 	
 	public static void main(String[] args) throws StaleProxyException, InterruptedException {
 		
-		if(args.length == 12) {
+		if(args.length == 13) {
 			n_sellers = Integer.parseInt(args[0]);
 			n_buyers = Integer.parseInt(args[1]);
 			n_reagencies = Integer.parseInt(args[2]);
@@ -76,6 +76,7 @@ public class Main {
 			ratio_bad_perf = Double.parseDouble(args[10]);
 			ratio_normal_perf = Double.parseDouble(args[11]);
 			ratio_good_perf = 1 - ratio_bad_perf - ratio_normal_perf;
+			DEBUG = Boolean.valueOf(args[12]);
 			if(ratio_impatient > 1 || ratio_impatient < 0 || ratio_best>1 || ratio_best < 0) {
 				System.out.println("Sum of ratios must be between 0 and 1");
 				System.exit(-2);

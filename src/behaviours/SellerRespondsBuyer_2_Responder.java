@@ -42,7 +42,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	protected ACLMessage handleCfp(ACLMessage cfp) {
 		//System.out.println("Recebi pedido de compra!");
 		//System.out.println(cfp);
-		this.seller.logFrom(cfp.getContent(),cfp.getSender());
+		this.seller.logFrom("Recebi pedido de compra com: " + cfp.getContent(),cfp.getSender());
 		ACLMessage reply = cfp.createReply();
 		
 		if(seller.getProperty() == null) {
@@ -104,6 +104,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	
 	protected void handleRejectProposal(ACLMessage cfp,ACLMessage propose,ACLMessage reject) {
 		//System.out.println("Seller received reject");
+		this.seller.logFrom("A proposta foi rejeitada.", reject.getSender());
 	}
 	
 	protected void handleOutOfSequence(ACLMessage msg) {
