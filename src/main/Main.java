@@ -29,11 +29,11 @@ public class Main {
 	private static double ratio_desperate = 1; //between 0 and 1
 	private static double ratio_normal_money = 1 - ratio_desperate; //between 0 and 1
 	
-	private static double ratio_flexible = 1; //between 0 and 1
+	private static double ratio_flexible = 0; //between 0 and 1
 	private static double ratio_normal_change = 1 - ratio_flexible; //between 0 and 1
 	
 	//buyer personality
-	private static double ratio_hurry = 1; //between 0 and 1
+	private static double ratio_hurry = 0; //between 0 and 1
 	private static double ratio_normal_calm = 0; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 0 and 1
 	
@@ -56,7 +56,38 @@ public class Main {
 	
 	public static final boolean DEBUG = false;
 	
-	public static void main(String[] str) throws StaleProxyException, InterruptedException {
+	public static void main(String[] args) throws StaleProxyException, InterruptedException {
+		
+		if(args.length == 12) {
+			n_sellers = Integer.parseInt(args[0]);
+			n_buyers = Integer.parseInt(args[1]);
+			n_reagencies = Integer.parseInt(args[2]);
+			n_reagents = Integer.parseInt(args[3]);
+			ratio_patient = Double.parseDouble(args[4]);
+			ratio_normal_patient = Double.parseDouble(args[5]);
+			ratio_impatient = 1 - ratio_patient - ratio_normal_patient;
+			ratio_desperate = Double.parseDouble(args[6]);
+			ratio_normal_money = 1 - ratio_desperate;
+			ratio_flexible = Double.parseDouble(args[7]);
+			ratio_normal_change = 1 - ratio_flexible;
+			ratio_hurry = Double.parseDouble(args[8]);
+			ratio_normal_calm = Double.parseDouble(args[9]);
+			ratio_best = 1 - ratio_hurry - ratio_normal_calm;
+			ratio_bad_perf = Double.parseDouble(args[10]);
+			ratio_normal_perf = Double.parseDouble(args[11]);
+			ratio_good_perf = 1 - ratio_bad_perf - ratio_normal_perf;
+			if(ratio_impatient > 1 || ratio_impatient < 0 || ratio_best>1 || ratio_best < 0) {
+				System.out.println("Sum of ratios must be between 0 and 1");
+				System.exit(-2);
+			}
+		}else if(args.length != 0) {
+			System.out.println("Arguments must be: <n_sellers> <n_buyers>"
+					+ " <n_agencies> <n_reagents> <ratio_patient> <ratio_normal_patient>"
+					+ " <ratio_desperate>  <ratio_flexible> <ratio_hurry> <ratio_normal_calm> <ratio_bad_perf> <ratio_normal_perf> <ratio_good_perf>");
+			System.exit(-1);
+		}
+		
+		
 		Runtime rt = Runtime.instance();
 		Profile profile = new ProfileImpl();
 		profile.setParameter("gui","true");
