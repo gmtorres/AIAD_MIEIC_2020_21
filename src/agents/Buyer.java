@@ -34,7 +34,7 @@ public class Buyer extends Person{
 	public ArrayList<AID> reAgents = new ArrayList();
 	public ArrayList<Integer> rates = new ArrayList();
 	
-	public Buyer(){
+	private Buyer(){
 		Random rnd = new Random();
 		this.property = null;
 		this.desired_property = new Property();
@@ -62,11 +62,6 @@ public class Buyer extends Person{
 	
 	public void setup() {
 		Object[] args = getArguments();
-		if(args == null) {
-			looking_state = Looking.CALM;
-		}else {
-			looking_state = Looking.values()[Integer.parseInt(args[0].toString())];
-		}
 		
 		this.addBehaviour(new BuyerContactsAgency(this,new ACLMessage(ACLMessage.REQUEST)));
 		
@@ -144,7 +139,7 @@ public class Buyer extends Person{
 		case CALM:
 			return 0.9;
 		case BEST:
-			return 1.2;
+			return 1;
 		}
 		return 1;
 	}
@@ -156,7 +151,7 @@ public class Buyer extends Person{
 		case CALM:
 			return 1.1;
 		case BEST:
-			return 1.3;
+			return 1.2;
 		}
 		return 1.1;
 	}

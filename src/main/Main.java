@@ -195,6 +195,25 @@ public class Main {
 	
 	private static void getStatistics() {
 		System.out.println("\n\n");
+		
+		System.out.print("Patient Sellers: " + 100*ratio_patient + "%");
+		System.out.print("\tNormal patience Sellers: " + 100*ratio_normal_patient + "%");
+		System.out.println("\tImpatient Sellers: " + 100*ratio_impatient + "%");
+		System.out.print("Desperate for money Sellers: " + 100*ratio_desperate + "%");
+		System.out.println("\tNormal money Sellers: " + 100*ratio_normal_money + "%");
+		System.out.print("Flexible Sellers: " + 100*ratio_flexible + "%");
+		System.out.println("\tInflexible Sellers: " + 100*ratio_normal_change + "%");
+		
+		System.out.print("Hurry buyers: " + 100*ratio_hurry + "%");
+		System.out.print("\tCalm buyers: " + 100*ratio_normal_calm + "%");
+		System.out.println("\tBest deal buyers: " + 100*ratio_best + "%");
+		
+		System.out.print("Bad performance agents: " + 100*ratio_bad_perf + "%");
+		System.out.print("\tNormal performance agents: " + 100*ratio_normal_perf + "%");
+		System.out.println("\tGood performance agents: " + 100*ratio_good_perf + "%");
+		
+		
+		System.out.println("");
 		System.out.println("Buyers: " + buyers.size());
 		System.out.println("Sellers: " + sellers.size());
 		
@@ -225,7 +244,7 @@ public class Main {
 				sellers_with_profit++;
 		}
 		System.out.println("Sellers with profit from those who sold their property: " + 100*(double)sellers_with_profit/(double)sellers_sold + "%");
-		System.out.println("\n");
+		System.out.println("");
 		int buyers_money_before = 0;
 		int buyers_money_now = 0;
 		int buyers_bought_money_before = 0;
@@ -251,7 +270,7 @@ public class Main {
 		double b_relation_bought = 100*(double)(buyers_bought_money_now - buyers_bought_money_before) / (double)buyers_bought_money_before;
 		System.out.println("Money difference in buyers that bought: " + (buyers_bought_money_now - buyers_bought_money_before) + "€ which is " + b_relation_bought + "%");
 		
-		System.out.println("\n");
+		System.out.println("");
 		
 		
 		int sellers_money_before = 0;
@@ -282,7 +301,7 @@ public class Main {
 		System.out.println("Money difference with rates in sellers that sold: " + (sellers_sold_with_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold_with + "%");
 		System.out.println("Money difference without rates in sellers that sold: " + (sellers_sold_without_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold_without + "%");
 		
-		System.out.println("\n");
+		System.out.println("");
 		
 		int rea_money_now = 0;
 		for(RealEstateAgent r : reagents) {
@@ -298,7 +317,7 @@ public class Main {
 		System.out.println("Real estate agents: " + reagents.size());
 		System.out.println("Money in agents: " + rea_money_now + "€ with a mean of " + rea_mean +"€ per agent and a standard deviation of " + rea_sd);
 		
-		System.out.println("\n");
+		System.out.println("");
 		int agen_money_now = 0;
 		for(RealEstateAgency r : reagency) {
 			agen_money_now += r.getMoney();
