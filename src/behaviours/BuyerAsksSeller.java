@@ -73,7 +73,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 				//System.out.println("Preço muito alto ou casa muito diferente, não vou negociar " + relativeDifference + "  " + relativePropertyValue);
 				ACLMessage reply = response.createReply();
 				reply.setPerformative(ACLMessage.REJECT_PROPOSAL);
-				this.buyer.log("A proposta do" + response.getSender().getLocalName() + " nao me agrada");
+				this.buyer.log("A proposta do " + response.getSender().getLocalName() + " nao me agrada");
 				replies.add(reply);
 				continue; 
 			}else { // negociar ou se diferença < 0 posso aceitar ou negociar
@@ -145,6 +145,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 			}else { // tenho dinheiro, mas nenhuma oferta é sufecientemente boa
 				if(replies.isEmpty() == false) {
 					//System.out.println("A mandar nova iteração");
+					this.buyer.log("Vou negociar as propostas recebidas");
 					this.newIteration(replies);
 				}	
 			}
@@ -152,6 +153,7 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 		}else { // não tenho dinheiro para nada, a negociar tudo
 			if(replies.isEmpty() == false) {
 				//System.out.println("A mandar nova iteração");
+				this.buyer.log("Vou negociar as propostas recebidas");
 				this.newIteration(replies);
 			}	
 		}

@@ -30,6 +30,7 @@ public class BuyerContactsAgency extends AchieveREInitiator {
 			r.setContent(this.buyer.getDesiredProperty().toString());
 			requests.add(r);
 		}
+		this.buyer.log("Vou contactar a agencia para saber de casas semelhantes");
 		return requests;
 	}
 	
@@ -39,6 +40,7 @@ public class BuyerContactsAgency extends AchieveREInitiator {
 	
 	protected void handleInform(ACLMessage inform) {
 		//System.out.println("BUYER:\n"+inform);
+		this.buyer.logFrom("Recebi sellers", inform.getSender());
 		String content = inform.getContent();
 		if(content == null || (content != null && content.equals("")))
 			return;

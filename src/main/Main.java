@@ -15,10 +15,10 @@ import jade.core.ProfileImpl;
 public class Main {
 	
 	// number of agents
-	private static int n_sellers = 10; //greater than 0
+	private static int n_sellers = 5; //greater than 0
 	private static int n_buyers = 2;  //greater than 0
 
-	private static int n_reagencies = 2; //greater than 0
+	private static int n_reagencies = 1; //greater than 0
 	private static int n_reagents = 3; //greater than 0
 	
 	
@@ -54,6 +54,8 @@ public class Main {
 	static {
 		rnd = new Random();
 	}
+	
+	public static final boolean DEBUG = false;
 	
 	public static void main(String[] str) throws StaleProxyException, InterruptedException {
 		Runtime rt = Runtime.instance();
@@ -193,6 +195,7 @@ public class Main {
 	}
 	
 	private static void getStatistics() {
+		System.out.println("\n\n");
 		System.out.println("Buyers: " + buyers.size());
 		System.out.println("Sellers: " + sellers.size());
 		

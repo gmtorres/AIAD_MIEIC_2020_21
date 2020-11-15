@@ -42,6 +42,7 @@ public class AgencyRequestsAgent extends AchieveREInitiator {
 				myAgent.send(response);
 			}
 		}
+		this.agency.log("A contactar um agente relativamente a casa");
 		return requests;
 	}
 	
@@ -51,6 +52,7 @@ public class AgencyRequestsAgent extends AchieveREInitiator {
 	
 	protected void handleInform(ACLMessage inform) {
 		//System.out.println(inform);
+		this.agency.logTo("A enviar sellers ao buyer", clientRequest.getSender());
 		ACLMessage response = clientRequest.createReply();
 		response.setPerformative(ACLMessage.INFORM);
 		response.setContent(inform.getContent());

@@ -21,6 +21,7 @@ public class SellerGetsRequest extends AchieveREResponder{
 	}
 	
 	protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) {
+		this.seller.log("A enviar casas ao agente: " + request.getSender().getLocalName());
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.INFORM);
 		if(this.seller.getProperty() != null)

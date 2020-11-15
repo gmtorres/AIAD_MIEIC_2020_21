@@ -19,7 +19,7 @@ public class AgencyRespondsAgent extends ContractNetResponder {
 	protected ACLMessage handleCfp(ACLMessage cfp) {
 		//System.out.println("Recebi proposta do agente!");
 		int num = Integer.parseInt(cfp.getContent().substring(cfp.getContent().lastIndexOf(":") + 1));
-		
+		this.agency.logFrom(cfp.getContent(),cfp.getSender());
 		ACLMessage reply = cfp.createReply();
 		
 		if(num < agency.getAgentMinRate() || num > agency.getAgentMaxRate() && agency.canAcceptAgents()) {

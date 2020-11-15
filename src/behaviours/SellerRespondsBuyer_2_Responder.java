@@ -73,9 +73,11 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 			//System.out.println("Comprador sugeriu outro preço: " + offer);
 			if(interactions >= this.seller.getMaxInteractions()) {
 				//System.out.println("Cansei me desta negociação, vou desistir");
+				this.seller.log("Negociação " + interactions + ", muito longo, vou desistir");
 				reply.setPerformative(ACLMessage.REFUSE);
-			}else if(offer < this.min_value * 0.90) {
+			}else if(offer < this.min_value * 0.85) {
 				//System.out.println("Oferta muito baixa, deve estar a goxar comigo");
+				this.seller.log("Valor muito baixo, não continuar");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}
 			else if(offer >= this.max_value) {
@@ -83,10 +85,13 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 				Integer propose = offer;
 				reply.setContent(Integer.toString(propose) + "/" + this.seller.getProperty());
 			}else {
-				//System.out.println("Vou sugerir outro preço ao comprador");
+				System.out.println("Vou sugerir outro preço ao comprador");
 				Integer difference = this.max_value - offer;
 				double gaussian = this.generateRandomDistribution(5) * this.seller.getPriceRange() 
 									+ this.seller.getPriceStart();
+				System.out.println(gaussian);
+				System.out.println(difference);
+				System.out.println(offer);
 				Integer new_proposal = (int) (offer + difference * gaussian);
 				max_value = new_proposal;
 				reply.setPerformative(ACLMessage.PROPOSE);
@@ -106,6 +111,7 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 	}
 	
 	protected ACLMessage handleAcceptProposal(ACLMessage cfp,ACLMessage propose,ACLMessage accept) throws FailureException{
+		this.seller.log("Recebi um accept do " + accept.getSender().getLocalName());
 		ACLMessage reply = accept.createReply();
 		if(this.seller.getProperty() != null) {
 			

@@ -29,7 +29,7 @@ public class AgentAsksAgency extends ContractNetInitiator {
 	
 	protected Vector<ACLMessage> prepareCfps(ACLMessage cfp) {
 		Vector<ACLMessage> v = new Vector<ACLMessage >();
-		cfp.setContent("Quero entrar na agencia! A minha taxa ï¿½:" + agent.getAgentRate());
+		cfp.setContent("Quero entrar na agencia! A minha taxa e:" + agent.getAgentRate());
 		// System.out.println("AGENTE: Quero entrar na agencia! A minha taxa: " + agent.getAgentRate() + " euros");
 		DFAgentDescription[] agencies = this.agent.searchForAgency();
 		for (int i = 0; i < agencies.length; i++) {
@@ -39,6 +39,9 @@ public class AgentAsksAgency extends ContractNetInitiator {
 		v.add(cfp);
 		return v;		
 	}
+	protected void handleRefuse(ACLMessage refuse) {
+		this.agent.log("A agencia: " + refuse.getSender().getLocalName() + " recusou a minha proposta");
+	}
 	
 	protected void handlePropose(ACLMessage response, Vector acceptances) {
 				
@@ -47,13 +50,14 @@ public class AgentAsksAgency extends ContractNetInitiator {
 			accept.setPerformative(ACLMessage.ACCEPT_PROPOSAL);
 			acceptances.add(accept);
 			this.accepted = true;
-			
+			this.agent.log("A agencia: " + response.getSender().getLocalName() + " está disponivel para mim");
 			return;
 		}
 		else {
 			ACLMessage refuse = response.createReply();
 			refuse.setPerformative(ACLMessage.REJECT_PROPOSAL);
 			acceptances.add(refuse);
+			this.agent.log("A agencia: " + response.getSender().getLocalName() + " aceitou mas ja me comprometi");
 		}
 		
 		return;
@@ -63,10 +67,12 @@ public class AgentAsksAgency extends ContractNetInitiator {
 	protected void handleInform(ACLMessage inform) {
 		this.agent.setAgency(inform.getSender());
 		//System.out.println("AGENTE: Tenho nova agencia!");
+		this.agent.log("Tenho uma nova agencia: " + inform.getSender().getLocalName());
 	}
 	
 	protected void handleFailure(ACLMessage failure) {
 		this.agent.setAgency(null);
+		this.accepted = false;
 		this.reset(new ACLMessage (ACLMessage.CFP));
 	}
 }

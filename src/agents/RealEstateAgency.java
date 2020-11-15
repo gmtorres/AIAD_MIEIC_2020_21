@@ -89,7 +89,7 @@ public class RealEstateAgency extends Logger{
     }
     
     public boolean canAcceptAgents() {
-    	return maxTeamSize > this.getTeamSize();
+    	return maxTeamSize >= this.getTeamSize();
     }
 
     public void removeAgent (AID agent) {

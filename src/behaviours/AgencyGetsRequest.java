@@ -17,6 +17,7 @@ public class AgencyGetsRequest extends AchieveREResponder {
 	
 	protected ACLMessage handleRequest(ACLMessage request) {
 		//System.out.println(request);
+		this.agency.logFrom("Fui contactada com a seguinte informação:" + request.getContent(),request.getSender());
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.AGREE);
 		registerPrepareResultNotification(new AgencyRequestsAgent(this.agency,new ACLMessage(ACLMessage.REQUEST),request));

@@ -39,7 +39,9 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 			AID aid = s.getName();
 			r.addReceiver(aid);
 			requests.add(r);
+			possible.remove(rand);
 		}
+		this.REagent.log("A pedir casas aos sellers");
 		return requests;
 	}
 	
@@ -67,6 +69,8 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 				}
 			}
 		}
+		
+		this.REagent.logTo("A enviar sellers de volta", clientRequest.getSender());
 		
 		ACLMessage response = clientRequest.createReply();
 		response.setPerformative(ACLMessage.INFORM);

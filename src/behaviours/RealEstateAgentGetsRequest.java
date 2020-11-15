@@ -14,6 +14,7 @@ public class RealEstateAgentGetsRequest extends AchieveREResponder {
 	}
 	
 	protected ACLMessage handleRequest(ACLMessage request) {
+		this.REagent.logFrom("Recebi um request da agencia:" + request.getContent() , request.getSender());
 		ACLMessage reply = request.createReply();
 		reply.setPerformative(ACLMessage.AGREE);
 		registerPrepareResultNotification(new RealEstateAgentGetSellers(this.REagent,new ACLMessage(ACLMessage.REQUEST),request));
