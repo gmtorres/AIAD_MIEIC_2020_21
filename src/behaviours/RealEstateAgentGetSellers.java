@@ -1,5 +1,6 @@
 package behaviours;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Vector;
 
 import agents.RealEstateAgent;
@@ -26,7 +27,14 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 	protected Vector prepareRequests(ACLMessage request) {
 		Vector requests = new Vector<ACLMessage>();
 		DFAgentDescription[] sellers = this.REagent.searchForSeller();
-		for(DFAgentDescription s : sellers) {
+		Vector<Integer> possible = new Vector<Integer>();
+		for(int i = 0; i < sellers.length;i++)
+			possible.add(i);
+		Random rnd = new Random();
+		for(int i = 0; i < this.REagent.getMaxSellers() && possible.isEmpty() == false;i++) {
+			int rand = rnd.nextInt(possible.size());
+			int index = possible.get(rand);
+			DFAgentDescription s = sellers[index];
 			ACLMessage r = (ACLMessage) request.clone();
 			AID aid = s.getName();
 			r.addReceiver(aid);
@@ -59,7 +67,6 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 				}
 			}
 		}
-		//System.out.println(accepted);
 		
 		ACLMessage response = clientRequest.createReply();
 		response.setPerformative(ACLMessage.INFORM);
@@ -73,30 +80,4 @@ public class RealEstateAgentGetSellers extends AchieveREInitiator {
 		}
 	}
 	
-	
-	/*@Override
-	public void action() {
-		ACLMessage response = clientRequest.createReply();
-		response.setPerformative(ACLMessage.INFORM);
-		
-		DFAgentDescription[] sellers = this.REagent.searchForSeller();
-		String content = "";
-		for(DFAgentDescription dfa : sellers) { //do selection of sellers
-			content+=dfa.getName() + ",";
-		}
-		response.setContent(content);
-		
-		if (parent != null) {
-			DataStore ds = getDataStore();
-			ds.put(((AchieveREResponder) parent).RESULT_NOTIFICATION_KEY, response);
-		} else {
-			myAgent.send(response);
-		}
-		done = true;
-	}
-
-	@Override
-	public boolean done() {
-		return done;
-	}*/
 }

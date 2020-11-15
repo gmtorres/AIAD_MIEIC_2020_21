@@ -37,6 +37,7 @@ public class Seller extends Person{
 	private PriceChange price_change;
 	
 	private Property old_property = null;
+	private int payed_to_agent = 0;
 	
 	public Seller(int p, int m, int c){
 		personality = Personality.values()[p];
@@ -49,16 +50,6 @@ public class Seller extends Person{
 	
 	public void setup() {
 		this.setProperty(new Property());
-		Object[] args = getArguments();
-		if(args == null) {
-			personality = Personality.NORMAL;
-			money_status = MoneyStatus.NORMAL;
-			price_change = PriceChange.NORMAL;
-		}else {
-			personality = Personality.values()[Integer.parseInt(args[0].toString())];
-			money_status = MoneyStatus.values()[Integer.parseInt(args[1].toString())];
-			price_change = PriceChange.values()[Integer.parseInt(args[2].toString())];
-		}
 		
 		//System.out.println(this.getLocalName()+ ": Let's sell this property for: " + this.getProperty().getPrice() + "€");
 		
@@ -117,8 +108,20 @@ public class Seller extends Person{
 		return this.old_property;
 	}
 	
+	public int getTotalWithRate() {
+		if(this.getProperty() == null)
+			return this.getMoney();
+		return this.getProperty().getPrice();
+	}
+	public int getTotalWithoutRate() {
+		if(this.getProperty() == null)
+			return this.getMoney() + this.payed_to_agent;
+		return this.getProperty().getPrice();
+	}
+	
 	public void sellHouse(AID reagent,int rate, int price){
 		int price_to_agent = rate*price/100;
+		payed_to_agent = price_to_agent;
 		
 		this.old_property = this.getProperty();
 		this.setProperty(null);

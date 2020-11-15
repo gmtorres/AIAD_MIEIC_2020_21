@@ -6,6 +6,7 @@ import behaviours.AgencyGetsRequest;
 import behaviours.AgencyRespondsAgent;
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.SequentialBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAException;
@@ -19,6 +20,7 @@ public class RealEstateAgency extends Agent{
     private int minAgentRate;
     private int maxAgentRate;
     private int maxTeamSize;
+    private int money = 0;
 
     public RealEstateAgency() {
     	super();
@@ -32,9 +34,25 @@ public class RealEstateAgency extends Agent{
     public void setup() {
 		addBehaviour(new AgencyRespondsAgent(this, MessageTemplate.MatchPerformative(ACLMessage.CFP)));
 		addBehaviour(new AgencyGetsRequest(this,MessageTemplate.MatchPerformative(ACLMessage.REQUEST)));
+		addBehaviour(new CyclicBehaviour(this) 
+        {
+			MessageTemplate mt= MessageTemplate.MatchPerformative(ACLMessage.INFORM_IF);
+            public void action() 
+            {
+				ACLMessage msg= receive(mt);
+                if (msg!=null) {
+                	String content = msg.getContent();
+                	int transaction_money = Integer.parseInt(content);
+                	money += transaction_money;
+                }
+                block();
+             }
+        });
 		register();
 	}
-    
+    public int getMoney() {
+    	return this.money;
+    }
     protected void register() {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());

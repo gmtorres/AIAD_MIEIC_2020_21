@@ -23,7 +23,7 @@ public class Main {
 	//seller
 	private static double ratio_patient = 1; //between 0 and 1
 	private static double ratio_normal_patient = 0; //between 0 and 1
-	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 1 and 40
+	private static double ratio_impatient = 1 - ratio_patient - ratio_normal_patient; //between 0 and 1
 	private static double ratio_desperate = 1;
 	private static double ratio_normal_money = 1 - ratio_desperate;
 	private static double ratio_flexible = 1;
@@ -32,13 +32,18 @@ public class Main {
 	//buyer
 	private static double ratio_hurry = 1; //between 0 and 1
 	private static double ratio_normal_calm = 0; //between 0 and 1
-	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 1 and 40
-
+	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 0 and 1
+	
+	//RealEstateAgent
+	private static double ratio_bad_perf = 1; //between 0 and 1
+	private static double ratio_normal_perf = 0; //between 0 and 1
+	private static double ratio_good_perf = 1 - ratio_bad_perf - ratio_normal_perf; //between 1 and 40
 	
 	private static ArrayList<Seller> sellers = new ArrayList<Seller>();
 	private static ArrayList<Buyer> buyers = new ArrayList<Buyer>();
 	
 	private static ArrayList<RealEstateAgent> reagents = new ArrayList<RealEstateAgent>();
+	private static ArrayList<RealEstateAgency> reagency = new ArrayList<RealEstateAgency>();
 
 	static Random rnd;
 	static {
@@ -60,6 +65,7 @@ public class Main {
 		sellers = new ArrayList<Seller>();
 		buyers = new ArrayList<Buyer>();
 		reagents = new ArrayList<RealEstateAgent>();
+		reagency = new ArrayList<RealEstateAgency>();
 		
 		ContainerController cc = rt.createMainContainer(profile);
 		
@@ -158,6 +164,7 @@ public class Main {
 			try {
 				agc = cc.acceptNewAgent("Agencia_" + String.valueOf(i),agency);
 				agc.start();
+				reagency.add(agency);
 			} catch (StaleProxyException e) {
 				e.printStackTrace();
 			}
@@ -167,8 +174,10 @@ public class Main {
 	private static void createAgents (ContainerController cc) {
 		for(int i = 0; i < n_reagents; i++) {
 			AgentController agc;
+			double[] temp1 = {ratio_bad_perf,ratio_normal_perf,ratio_good_perf};
+			int p = getInterval(temp1);
 			try {
-				RealEstateAgent rea = new RealEstateAgent();
+				RealEstateAgent rea = new RealEstateAgent(p);
 				agc = cc.acceptNewAgent("RealEstateAgent_" + String.valueOf(i), rea);
 				agc.start();
 				reagents.add(rea);
@@ -241,14 +250,16 @@ public class Main {
 		int sellers_money_before = 0;
 		int sellers_money_now = 0;
 		int sellers_sold_money_before = 0;
-		int sellers_sold_money_now = 0;
+		int sellers_sold_with_money_now = 0;
+		int sellers_sold_without_money_now = 0;
 		
 		for(Seller s : sellers) {
 			sellers_money_before += (s.getOldProperty() == null) ? s.getProperty().getPrice() : s.getOldProperty().getPrice();
 			sellers_money_now += (s.getOldProperty() == null) ? s.getProperty().getPrice() : s.getMoney();
 			if(s.getOldProperty() != null) { // vendeu uma casa
 				sellers_sold_money_before += s.getOldProperty().getPrice();
-				sellers_sold_money_now += s.getMoney();
+				sellers_sold_with_money_now += s.getTotalWithRate();
+				sellers_sold_without_money_now += s.getTotalWithoutRate();
 			}
 		}
 		System.out.println("Money in sellers before: " + sellers_money_before + "€");
@@ -257,9 +268,12 @@ public class Main {
 		System.out.println("Money difference in sellers: " + (sellers_money_now - sellers_money_before) + "€ which is " + s_relation + "%");
 		
 		System.out.println("Money in sellers that sold before: " + sellers_sold_money_before + "€");
-		System.out.println("Money in sellers that sold now: " + sellers_sold_money_now + "€");
-		double s_relation_sold = 100*(double)(sellers_sold_money_now - sellers_sold_money_before) / (double)sellers_sold_money_before;
-		System.out.println("Money difference in sellers that sold: " + (sellers_sold_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold + "%");
+		System.out.println("Money in sellers that sold now with rates: " + sellers_sold_with_money_now + "€");
+		System.out.println("Money in sellers that sold now without rates: " + sellers_sold_without_money_now + "€");
+		double s_relation_sold_with = 100*(double)(sellers_sold_with_money_now - sellers_sold_money_before) / (double)sellers_sold_money_before;
+		double s_relation_sold_without = 100*(double)(sellers_sold_without_money_now - sellers_sold_money_before) / (double)sellers_sold_money_before;
+		System.out.println("Money difference with rates in sellers that sold: " + (sellers_sold_with_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold_with + "%");
+		System.out.println("Money difference without rates in sellers that sold: " + (sellers_sold_without_money_now - sellers_sold_money_before) + "€ which is " + s_relation_sold_without + "%");
 		
 		System.out.println("\n");
 		
@@ -274,7 +288,24 @@ public class Main {
 		}
 		rea_sd = Math.sqrt(rea_sd/reagents.size());
 		
+		System.out.println("Real estate agents: " + reagents.size());
 		System.out.println("Money in agents: " + rea_money_now + "€ with a mean of " + rea_mean +"€ per agent and a standard deviation of " + rea_sd);
+		
+		System.out.println("\n");
+		int agen_money_now = 0;
+		for(RealEstateAgency r : reagency) {
+			agen_money_now += r.getMoney();
+		}
+		double agen_mean = (double)rea_money_now/reagency.size();
+		double agen_sd = 0;
+		for(RealEstateAgency r : reagency) {
+			agen_sd += Math.pow(r.getMoney()-agen_mean,2);
+		}
+		agen_sd = Math.sqrt(agen_sd/reagency.size());
+		
+		System.out.println("Real estate agency: " + reagency.size());
+		System.out.println("Money in agents: " + agen_money_now + "€ with a mean of " + agen_mean +"€ per agency and a standard deviation of " + agen_sd);
+
 		
 		
 	}

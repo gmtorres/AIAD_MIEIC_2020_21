@@ -71,10 +71,10 @@ public class SellerRespondsBuyer_2_Responder extends SSIteratedContractNetRespon
 		}else { // analisar o valor proposto pelo comprador e sugerir outro ou aceitar
 			//System.out.println("Comprador sugeriu outro preço: " + offer);
 			if(interactions >= this.seller.getMaxInteractions()) {
-				System.out.println("Cansei me desta negociação, vou desistir");
+				//System.out.println("Cansei me desta negociação, vou desistir");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}else if(offer < this.min_value * 0.90) {
-				System.out.println("Oferta muito baixa, deve estar a goxar comigo");
+				//System.out.println("Oferta muito baixa, deve estar a goxar comigo");
 				reply.setPerformative(ACLMessage.REFUSE);
 			}
 			else if(offer >= this.max_value) {

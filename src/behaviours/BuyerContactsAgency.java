@@ -58,7 +58,6 @@ public class BuyerContactsAgency extends AchieveREInitiator {
 		}
 		
 		for(String s: sellers) {
-			//System.out.println(s);
 			if(s.isBlank() || s.isEmpty())
 				continue;
 			StringACLCodec codec = new StringACLCodec(new StringReader(s), null);

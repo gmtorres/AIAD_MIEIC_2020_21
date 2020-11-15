@@ -12,6 +12,7 @@ import jade.lang.acl.MessageTemplate;
 
 import java.util.Random;
 
+import agents.Seller.PriceChange;
 import behaviours.AgentAsksAgency;
 import behaviours.RealEstateAgentGetsRequest;
 
@@ -21,11 +22,34 @@ public class RealEstateAgent extends Agent{
     private Behaviour b = null;
     
     private int money = 0;
+    private int max_sellers = 50;
     
-    public RealEstateAgent(){
-    	super();
+    enum Performance{
+    	BAD,
+    	NORMAL,
+    	GOOD
+    }
+    
+    private Performance performance;
+    
+    public RealEstateAgent(int p){
+        this.performance = Performance.values()[p];
+        
+        this.setRate();
+    }
+    private void setRate() {
     	Random rnd = new Random();
-        this.agentRate = rnd.nextInt(8) + 1;
+    	switch(performance) {
+    	case BAD:
+    		this.agentRate = rnd.nextInt(5) + 1;
+    		break;
+    	case NORMAL:
+    		this.agentRate = rnd.nextInt(4) + 3;
+    		break;
+    	case GOOD:
+    		this.agentRate = rnd.nextInt(4) + 5;
+    		break;
+    	}
     }
     
     public void setup() {
@@ -40,7 +64,17 @@ public class RealEstateAgent extends Agent{
 				ACLMessage msg= receive(mt);
                 if (msg!=null) {
                 	String content = msg.getContent();
-                	money += Integer.parseInt(content);
+                	int transaction_money = Integer.parseInt(content);
+                	int my_money = (int) ((double)transaction_money * 0.5);
+                	int agency_money = (int) ((double)transaction_money * 0.5);
+                	
+                	money += my_money;
+                	
+                	ACLMessage msg_2 = new ACLMessage(ACLMessage.INFORM_IF);
+            		AID dest = agency;
+            	    msg_2.addReceiver(dest);
+            	    msg_2.setContent(String.valueOf(agency_money));
+            	    send(msg_2);
                 }
                 block();
              }
@@ -51,6 +85,18 @@ public class RealEstateAgent extends Agent{
 			return false;
 		String a = b.getExecutionState();
 		return b.done();
+	}
+	
+	public int getMaxSellers(){
+		switch(performance) {
+    	case BAD:
+    		return 25;
+    	case NORMAL:
+    		return 40;
+    	case GOOD:
+    		return 70;
+    	}
+		return 40;
 	}
     
     public void setAgency(AID agency) {
