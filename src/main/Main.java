@@ -15,12 +15,11 @@ import jade.core.ProfileImpl;
 public class Main {
 	
 	// number of agents
-	private static int n_sellers = 5; //greater than 0
-	private static int n_buyers = 2;  //greater than 0
+	private static int n_sellers = 100; //greater than 0
+	private static int n_buyers = 10;  //greater than 0
 
-	private static int n_reagencies = 1; //greater than 0
-	private static int n_reagents = 3; //greater than 0
-	
+	private static int n_reagencies = 3; //greater than 0
+	private static int n_reagents = 12; //greater than 0
 	
 	//seller personality
 	private static double ratio_patient = 1; //between 0 and 1
@@ -33,16 +32,16 @@ public class Main {
 	private static double ratio_flexible = 1; //between 0 and 1
 	private static double ratio_normal_change = 1 - ratio_flexible; //between 0 and 1
 	
-	
 	//buyer personality
-	private static double ratio_hurry = 1; //between 0 and 1
+	private static double ratio_hurry = 0; //between 0 and 1
 	private static double ratio_normal_calm = 0; //between 0 and 1
 	private static double ratio_best = 1 - ratio_hurry - ratio_normal_calm; //between 0 and 1
 	
 	//RealEstateAgent personality
-	private static double ratio_bad_perf = 1; //between 0 and 1
+	private static double ratio_bad_perf = 0; //between 0 and 1
 	private static double ratio_normal_perf = 0; //between 0 and 1
 	private static double ratio_good_perf = 1 - ratio_bad_perf - ratio_normal_perf; //between 0 and 1
+	
 	
 	private static ArrayList<Seller> sellers = new ArrayList<Seller>();
 	private static ArrayList<Buyer> buyers = new ArrayList<Buyer>();
@@ -320,8 +319,8 @@ public class Main {
 	
 	private static int getInterval(double values[]) {
 		double r = rnd.nextDouble();
-		int i = 0;
-		for(; i < values.length-1;i++) {
+		int i = 1;
+		for(i=0; i < values.length-1;i++) {
 			if(r >= values[i] && r <= values[i+1])
 				return i;
 		}

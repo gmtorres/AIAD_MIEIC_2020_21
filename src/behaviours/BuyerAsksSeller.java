@@ -111,7 +111,8 @@ public class BuyerAsksSeller extends ContractNetInitiator  {
 					reply.setContent(Integer.toString(new_proposal));
 					replies.add(reply);
 					
-					if(factor > bestFactor) {
+					double bestMoneyFactor = this.buyer.getBestMoneyFactor();
+					if(factor > bestFactor && relativePropertyPrice > bestMoneyFactor ) {
 						bestFactor = factor;
 						position = i;
 					}

@@ -137,23 +137,34 @@ public class Buyer extends Person{
 		}
 		return result;
 	}
+	public double getBestMoneyFactor() {
+		switch(looking_state) {
+		case HURRY:
+			return 0.7;
+		case CALM:
+			return 0.9;
+		case BEST:
+			return 1.2;
+		}
+		return 1;
+	}
 	
 	public double getBestFactor() {
 		switch(looking_state) {
 		case HURRY:
-			return 0.9;
+			return 0.95;
 		case CALM:
 			return 1.1;
 		case BEST:
-			return 1.2;
+			return 1.3;
 		}
-		return 1.2;
+		return 1.1;
 	}
 	
 	public int getMinValid() { // minumum of houses available, if lower than this, forced to make a decision
 		switch(looking_state) {
 		case HURRY:
-			return 5;
+			return 6;
 		case CALM:
 			return 4;
 		case BEST:
@@ -165,11 +176,11 @@ public class Buyer extends Person{
 	public double getWorstFactor() {
 		switch(looking_state) {
 		case HURRY:
-			return 0.80;
+			return 0.85;
 		case CALM:
 			return 1;
 		case BEST:
-			return 1.15;
+			return 1.2;
 		}
 		return 1;
 	}

@@ -137,9 +137,9 @@ public class Seller extends Person{
 	public int getMaxInteractions() {
 		switch(personality) {
 		case PATIENT:
-			return 10;
+			return 12;
 		case NORMAL:
-			return 7;
+			return 8;
 		case IMPATIENT:
 			return 4;
 		}
@@ -149,9 +149,9 @@ public class Seller extends Person{
 	public double getMinDifference(){
 		switch(money_status) {
 		case DESPERATE:
-			return 0.85;
+			return 0.7;
 		case NORMAL:
-			return 0.9;
+			return 0.85;
 		}
 		return 0.9;
 	}
