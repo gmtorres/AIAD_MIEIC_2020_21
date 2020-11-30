@@ -1,7 +1,7 @@
 # AIAD_MIEIC_2020_21
 
 The real estate market is in trend at the moment. For this project we aim to implement a SMA which interactions between agents simulate the transactions between real estate agents, real estate agencies and buyers/sellers of a property. This wy we have several agents involved in each interaction, with different goals each: 
-- real estate agency: Employa set of real estate agents capable of maximize its profits
+- real estate agency: Employs a set of real estate agents capable of maximize its profits
 - real estate agent: Maximize each selling property, presenting results to its agency
 - buyer: Find the best suitable property for his needs at the best price
 - seller: Sell the property at the hightest price possible
